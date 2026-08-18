@@ -42,8 +42,18 @@ export const authService = {
   },
 
   async verifyOtp(input: VerifyOtpInput, token: string) {
-    const result = verifyVerificationToken(token);
-    const otpRecord = await Otp.findOne({ userId: result.userId });
+    let result;
+
+    try {
+      result = verifyVerificationToken(token);
+    } catch {
+      throw ApiError.unauthorized("Verification session expired");
+    }
+
+    const otpRecord = await Otp.findOne({
+      userId: result.userId,
+      purpose: "email_verification",
+    });
 
     if (!otpRecord) {
       throw ApiError.badRequest("Invalid or expired verification code");
@@ -58,19 +68,16 @@ export const authService = {
       throw ApiError.badRequest("Incorrect verification code");
     }
 
-    if (otpRecord.purpose === "email_verification") {
-      await User.updateOne(
-        { _id: result.userId },
-        { $set: { isVerified: true } },
-      );
+    const user = await User.findOneAndUpdate(
+      { _id: result.userId },
+      { $set: { isVerified: true } },
+      { $new: true },
+    );
 
-      await Otp.deleteOne({ userId: result.userId });
+    await Otp.deleteOne({ userId: result.userId });
 
-      const user = await User.findOne({ _id: result.userId });
-
-      return {
-        user,
-      };
-    }
+    return {
+      user,
+    };
   },
 };
