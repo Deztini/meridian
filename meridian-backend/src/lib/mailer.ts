@@ -11,11 +11,12 @@ const sender = {
 };
 
 export async function sendOtpEmail(to: string, otp: string) {
-  await client.send({
+  const res = await client.send({
     from: sender,
     to: [{ email: to }],
-    subject: "",
+    subject: "Meridian Verification Code",
     text: `Your OTP code is ${otp}. It expires in 10 minutes.`,
     category: "OTP Verification",
   });
+  console.log(res);
 }
