@@ -21,7 +21,7 @@ export const authController = {
       }
 
       return new ApiResponse(
-        201,
+        200,
         "If this email is valid, a verification code has been sent",
       ).send(res);
     } catch (err) {
@@ -51,6 +51,24 @@ export const authController = {
           fullName: user?.fullName,
         },
       }).send(res);
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  async resendOtp(req: Request, res: Response, next: NextFunction) {
+    try {
+      const token = req.cookies.verificationToken;
+
+      if (!token) {
+        throw ApiError.unauthorized("Verification session expired");
+      }
+
+      await authService.resendOtp(token);
+
+      return new ApiResponse(200, "A new verification code has been sent").send(
+        res,
+      );
     } catch (err) {
       next(err);
     }

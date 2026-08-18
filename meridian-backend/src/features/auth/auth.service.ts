@@ -14,7 +14,26 @@ export const authService = {
   async signup(input: SignupInput) {
     const existingUser = await User.findOne({ email: input.email });
     if (existingUser) {
-      return;
+      if (existingUser.isVerified) {
+        return { token: null };
+      }
+      await Otp.deleteOne({
+        userId: existingUser._id,
+        purpose: "email_verification",
+      });
+
+      const otp = generateOtp();
+      await Otp.create({
+        userId: existingUser._id,
+        code: otp,
+        purpose: "email_verification",
+        expiresAt: new Date(Date.now() + 10 * 60 * 1000),
+      });
+
+      await sendOtpEmail(existingUser.email, otp);
+
+      const token = signVerificationToken(existingUser._id.toString());
+      return { token };
     }
 
     const hashedPw = await bcrypt.hash(input.password, 12);
@@ -79,5 +98,48 @@ export const authService = {
     return {
       user,
     };
+  },
+
+  async resendOtp(token: string) {
+    let result;
+
+    try {
+      result = verifyVerificationToken(token);
+    } catch {
+      throw ApiError.unauthorized("Verification session expired");
+    }
+
+    const user = await User.findById(result.userId);
+
+    if (!user) {
+      throw ApiError.unauthorized("Verification session expired");
+    }
+
+    if (user.isVerified) {
+      throw ApiError.badRequest("This account is already verified");
+    }
+
+    const recentOtp = await Otp.findOne({
+      userId: user._id,
+      purpose: "email_verification",
+    });
+    if (recentOtp && recentOtp.createdAt.getTime() > Date.now() - 60 * 1000) {
+      throw ApiError.badRequest(
+        "Please wait a minute before requesting another code",
+      );
+    }
+
+    await Otp.deleteOne({ userId: user._id, purpose: "email_verification" });
+
+    const otp = generateOtp();
+
+    await Otp.create({
+      userId: user._id.toString(),
+      code: otp,
+      purpose: "email_verification",
+      expiresAt: new Date(Date.now() + 10 * 60 * 1000),
+    });
+
+    await sendOtpEmail(user.email, otp);
   },
 };
