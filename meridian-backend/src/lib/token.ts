@@ -15,3 +15,26 @@ export function verifyVerificationToken(token: string) {
     purpose: string;
   };
 }
+
+export function signAccessToken(userId: string) {
+  return jwt.sign({ userId }, env.jwtAccessSecret, { expiresIn: "15m" });
+}
+
+export function verifyAccessToken(token: string) {
+  return jwt.verify(token, env.jwtAccessSecret) as {
+    userId: string;
+  };
+}
+
+export function signRefreshToken(userId: string, sessionId: string) {
+  return jwt.sign({ userId, sessionId }, env.jwtRefreshSecret, {
+    expiresIn: "7d",
+  });
+}
+
+export function verifyRefreshToken(token: string) {
+  return jwt.verify(token, env.jwtRefreshSecret) as {
+    userId: string;
+    sessionId: string;
+  };
+}

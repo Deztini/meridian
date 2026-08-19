@@ -6,6 +6,8 @@ export const env = {
   databaseUrl: process.env.MONGODB_URI!,
   clientOrigin: process.env.CLIENT_ORIGIN,
   jwtVerifySecret: process.env.JWT_VERIFY_SECRET!,
+  jwtRefreshSecret: process.env.JWT_REFRESH_SECRET!,
+  jwtAccessSecret: process.env.JWT_ACCESS_SECRET!,
   mailtrap: {
     token: process.env.MAILTRAP_TOKEN,
     fromEmail: process.env.MAILTRAP_FROM_EMAIL,
