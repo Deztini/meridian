@@ -11,13 +11,20 @@ const VERIFY_COOKIE_OPTIONS: CookieOptions = {
   maxAge: 10 * 60 * 1000,
 };
 
+const REFRESH_COOKIE_OPTIONS: CookieOptions = {
+  httpOnly: true,
+  secure: env.nodeEnv === "production",
+  sameSite: "lax",
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+};
+
 export const authController = {
   async signup(req: Request, res: Response, next: NextFunction) {
     try {
-      const result = await authService.signup(req.body);
+      const { token } = await authService.signup(req.body);
 
-      if (result?.token) {
-        res.cookie("verificationToken", result.token, VERIFY_COOKIE_OPTIONS);
+      if (token) {
+        res.cookie("verificationToken", token, VERIFY_COOKIE_OPTIONS);
       }
 
       return new ApiResponse(
@@ -69,6 +76,23 @@ export const authController = {
       return new ApiResponse(200, "A new verification code has been sent").send(
         res,
       );
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  async login(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { accessToken, refreshToken, user } = await authService.login(
+        req.body,
+      );
+
+      res.cookie("refreshToken", refreshToken, REFRESH_COOKIE_OPTIONS);
+
+      return new ApiResponse(200, "Login successful", {
+        accessToken,
+        user,
+      }).send(res);
     } catch (err) {
       next(err);
     }
