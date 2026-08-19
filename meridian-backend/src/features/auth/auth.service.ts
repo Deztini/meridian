@@ -1,14 +1,18 @@
 import { sendOtpEmail } from "../../lib/mailer";
 import {
+  signAccessToken,
+  signRefreshToken,
   signVerificationToken,
   verifyVerificationToken,
 } from "../../lib/token";
 import { generateOtp } from "../../utils/generateOtp";
 import { User } from "./auth.model";
 import { Otp } from "./auth.otp.model";
-import type { SignupInput, VerifyOtpInput } from "./auth.validator";
+import type { LoginInput, SignupInput, VerifyOtpInput } from "./auth.validator";
 import { ApiError } from "../../utils/ApiError";
 import bcrypt from "bcrypt";
+import crypto from "crypto";
+import { Session } from "./auth.session.model";
 
 export const authService = {
   async signup(input: SignupInput) {
@@ -141,5 +145,52 @@ export const authService = {
     });
 
     await sendOtpEmail(user.email, otp);
+  },
+
+  async login(input: LoginInput) {
+    const user = await User.findOne({ email: input.email });
+    if (!user) {
+      throw ApiError.unauthorized("Invalid email or password");
+    }
+    if (!user.isVerified) {
+      throw ApiError.unauthorized("Please verify your email before logging in");
+    }
+
+    const passwordMatches = await bcrypt.compare(input.password, user.password);
+
+    if (!passwordMatches) {
+      throw ApiError.unauthorized("Invalid email or password");
+    }
+
+    const session = await Session.create({
+      userId: user._id,
+      refreshTokenHash: "pending",
+      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    });
+
+    const refreshToken = signRefreshToken(
+      user._id.toString(),
+      session._id.toString(),
+    );
+    const refreshTokenHash = crypto
+      .createHash("sha256")
+      .update(refreshToken)
+      .digest("hex");
+
+    session.refreshTokenHash = refreshTokenHash;
+
+    await session.save();
+
+    const accessToken = signAccessToken(user._id.toString());
+
+    return {
+      accessToken,
+      refreshToken,
+      user: {
+        id: user._id,
+        email: user.email,
+        fullName: user.fullName,
+      },
+    };
   },
 };
