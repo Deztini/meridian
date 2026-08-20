@@ -1,9 +1,9 @@
 import jwt from "jsonwebtoken";
 import { env } from "../config/env";
 
-export function signVerificationToken(userId: string) {
+export function signVerificationToken(userId: string, purpose: string) {
   return jwt.sign(
-    { userId, purpose: "email_verification" },
+    { userId, purpose },
     env.jwtVerifySecret,
     { expiresIn: "10m" },
   );

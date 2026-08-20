@@ -9,7 +9,12 @@ import {
 import { generateOtp } from "../../utils/generateOtp";
 import { User } from "./auth.model";
 import { Otp } from "./auth.otp.model";
-import type { LoginInput, SignupInput, VerifyOtpInput } from "./auth.validator";
+import type {
+  ForgotPasswordInput,
+  LoginInput,
+  SignupInput,
+  VerifyOtpInput,
+} from "./auth.validator";
 import { ApiError } from "../../utils/ApiError";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
@@ -37,7 +42,10 @@ export const authService = {
 
       await sendOtpEmail(existingUser.email, otp);
 
-      const token = signVerificationToken(existingUser._id.toString());
+      const token = signVerificationToken(
+        existingUser._id.toString(),
+        "email_verification",
+      );
       return { token };
     }
 
@@ -60,7 +68,10 @@ export const authService = {
 
     await sendOtpEmail(input.email, otp);
 
-    const token = signVerificationToken(user._id.toString());
+    const token = signVerificationToken(
+      user._id.toString(),
+      "email_verification",
+    );
 
     return { token };
   },
@@ -263,5 +274,28 @@ export const authService = {
     }
 
     await Session.deleteOne({ _id: decoded.sessionId });
+  },
+
+  async forgotPassword(input: ForgotPasswordInput) {
+    const user = await User.findOne({ email: input.email });
+
+    if (!user) {
+      return { token: null };
+    }
+
+    const otp = generateOtp();
+
+    await Otp.create({
+      userId: user._id.toString(),
+      code: otp,
+      purpose: "password_reset",
+      expiresAt: new Date(Date.now() + 10 * 60 * 1000),
+    });
+
+    await sendOtpEmail(input.email, otp);
+
+    const token = signVerificationToken(user._id.toString(), "password_reset");
+
+    return { token };
   },
 };
