@@ -85,7 +85,7 @@ export const authController = {
         throw ApiError.unauthorized("Verification session expired");
       }
 
-      await authService.resendOtp(token);
+      await authService.resendOtp(token, "email_verification");
 
       return new ApiResponse(200, "A new verification code has been sent").send(
         res,
@@ -152,6 +152,19 @@ export const authController = {
         200,
         "Code verified. You can now set a new password.",
       ).send(res);
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  async resendResetOtp(req: Request, res: Response, next: NextFunction) {
+    try {
+      const token = req.cookies.resetOtpToken;
+      if (!token) throw ApiError.unauthorized("Reset session expired");
+
+      await authService.resendOtp(token, "password_reset");
+
+      return new ApiResponse(200, "A new reset code has been sent").send(res);
     } catch (err) {
       next(err);
     }

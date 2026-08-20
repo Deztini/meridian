@@ -126,28 +126,35 @@ export const authService = {
     };
   },
 
-  async resendOtp(token: string) {
+  async resendOtp(
+    token: string,
+    purpose: "email_verification" | "password_reset",
+  ) {
     let result;
 
     try {
       result = verifyVerificationToken(token);
     } catch {
-      throw ApiError.unauthorized("Verification session expired");
+      throw ApiError.unauthorized("Session expired");
+    }
+
+    if (result.purpose !== purpose) {
+      throw ApiError.unauthorized("Invalid session");
     }
 
     const user = await User.findById(result.userId);
 
     if (!user) {
-      throw ApiError.unauthorized("Verification session expired");
+      throw ApiError.unauthorized("Session expired");
     }
 
-    if (user.isVerified) {
+    if (purpose === "email_verification" && user.isVerified) {
       throw ApiError.badRequest("This account is already verified");
     }
 
     const recentOtp = await Otp.findOne({
       userId: user._id,
-      purpose: "email_verification",
+      purpose,
     });
     if (recentOtp && recentOtp.createdAt.getTime() > Date.now() - 60 * 1000) {
       throw ApiError.badRequest(
@@ -155,14 +162,14 @@ export const authService = {
       );
     }
 
-    await Otp.deleteOne({ userId: user._id, purpose: "email_verification" });
+    await Otp.deleteOne({ userId: user._id, purpose});
 
     const otp = generateOtp();
 
     await Otp.create({
       userId: user._id.toString(),
       code: otp,
-      purpose: "email_verification",
+      purpose,
       expiresAt: new Date(Date.now() + 10 * 60 * 1000),
     });
 

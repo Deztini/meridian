@@ -9,13 +9,15 @@ router.post("/signup", validate(signupSchema), authController.signup);
 
 router.post("/verify-otp", validate(verifyOtpSchema), authController.verifyOtp);
 
-router.post("/resend-otp", validate(verifyOtpSchema), authController.resendOtp);
+router.post("/resend-otp",  authController.resendOtp);
 
 router.post("/login", validate(loginSchema), authController.login);
 
 router.post("/forgot-password", validate(forgotPasswordSchema), authController.forgotPassword);
 
 router.post("/verify-reset-otp", validate(verifyOtpSchema), authController.verifyResetOtp);
+
+router.post("/resend-reset-otp",  authController.resendResetOtp);
 
 router.post("/refresh", authController.refresh);
 
