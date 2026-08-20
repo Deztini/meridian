@@ -12,6 +12,7 @@ import { Otp } from "./auth.otp.model";
 import type {
   ForgotPasswordInput,
   LoginInput,
+  ResetPasswordInput,
   SignupInput,
   VerifyOtpInput,
 } from "./auth.validator";
@@ -162,7 +163,7 @@ export const authService = {
       );
     }
 
-    await Otp.deleteOne({ userId: user._id, purpose});
+    await Otp.deleteOne({ userId: user._id, purpose });
 
     const otp = generateOtp();
 
@@ -357,5 +358,31 @@ export const authService = {
     return {
       resetAuthorizedToken,
     };
+  },
+
+  async resetPassword(input: ResetPasswordInput, token: string) {
+    let result;
+
+    try {
+      result = verifyVerificationToken(token);
+    } catch {
+      throw ApiError.unauthorized("Session expired");
+    }
+
+    if (result.purpose !== "password_reset_authorized") {
+      throw ApiError.unauthorized("Invalid Session");
+    }
+
+    const user = await User.findById(result.userId);
+    if (!user) {
+      throw ApiError.unauthorized("Reset session expired. Please try again.");
+    }
+
+    const hashedPw = await bcrypt.hash(input.newPassword, 12);
+
+    user.password = hashedPw;
+    await user.save();
+
+    await Session.deleteMany({userId: user._id})
   },
 };

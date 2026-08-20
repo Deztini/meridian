@@ -142,6 +142,12 @@ export const authController = {
         token,
       );
 
+      res.clearCookie("resetOtpToken", {
+        httpOnly: true,
+        secure: env.nodeEnv === "production",
+        sameSite: "lax",
+      });
+
       res.cookie(
         "resetAuthorizedToken",
         resetAuthorizedToken,
