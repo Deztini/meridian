@@ -176,6 +176,31 @@ export const authController = {
     }
   },
 
+  async resetPassword(req: Request, res: Response, next: NextFunction) {
+    try {
+      const token = req.cookies.resetAuthorizedToken;
+
+      if (!token) {
+        throw ApiError.unauthorized("Reset session expired. Please try again.");
+      }
+
+      await authService.resetPassword(req.body, token);
+
+      res.clearCookie("resetAuthorizedToken", {
+        httpOnly: true,
+        secure: env.nodeEnv === "production",
+        sameSite: "lax",
+      });
+
+      return new ApiResponse(
+        200,
+        "Password reset successfully. Please log in.",
+      ).send(res);
+    } catch (err) {
+      next(err);
+    }
+  },
+
   async refresh(req: Request, res: Response, next: NextFunction) {
     try {
       const token = req.cookies.refreshToken;
