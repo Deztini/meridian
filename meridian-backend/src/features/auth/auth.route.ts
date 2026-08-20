@@ -13,4 +13,8 @@ router.post("/resend-otp", validate(verifyOtpSchema), authController.resendOtp);
 
 router.post("/login", validate(loginSchema), authController.login);
 
+router.post("/refresh", authController.refresh);
+
+router.post("/logout", authController.logout);
+
 export default router;

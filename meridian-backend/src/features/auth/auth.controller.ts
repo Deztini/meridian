@@ -97,4 +97,36 @@ export const authController = {
       next(err);
     }
   },
+
+  async refresh(req: Request, res: Response, next: NextFunction) {
+    try {
+      const token = req.cookies.refreshToken;
+      const { accessToken, refreshToken } = await authService.refresh(token);
+
+      res.cookie("refreshToken", refreshToken, REFRESH_COOKIE_OPTIONS);
+
+      return new ApiResponse(200, "Token refreshed", {
+        accessToken,
+      }).send(res);
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  async logout(req: Request, res: Response, next: NextFunction) {
+    try {
+      const token = req.cookies.refreshToken;
+      await authService.logout(token);
+
+      res.clearCookie("refreshToken", {
+        httpOnly: true,
+        secure: env.nodeEnv === "production",
+        sameSite: "lax",
+      });
+
+      return new ApiResponse(200, "Logged out successfully").send(res);
+    } catch (err) {
+      next(err);
+    }
+  },
 };
