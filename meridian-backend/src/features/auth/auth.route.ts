@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { validate } from "../../middleware/validate";
-import { loginSchema, signupSchema, verifyOtpSchema } from "./auth.validator";
+import { forgotPasswordSchema, loginSchema, signupSchema, verifyOtpSchema } from "./auth.validator";
 import { authController } from "./auth.controller";
 
 const router = Router();
@@ -12,6 +12,8 @@ router.post("/verify-otp", validate(verifyOtpSchema), authController.verifyOtp);
 router.post("/resend-otp", validate(verifyOtpSchema), authController.resendOtp);
 
 router.post("/login", validate(loginSchema), authController.login);
+
+router.post("/forgot-password", validate(forgotPasswordSchema), authController.forgotPassword);
 
 router.post("/refresh", authController.refresh);
 

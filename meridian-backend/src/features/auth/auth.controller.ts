@@ -18,6 +18,13 @@ const REFRESH_COOKIE_OPTIONS: CookieOptions = {
   maxAge: 7 * 24 * 60 * 60 * 1000,
 };
 
+const RESET_OTP_COOKIE_OPTIONS: CookieOptions = {
+  httpOnly: true,
+  secure: env.nodeEnv === "production",
+  sameSite: "lax",
+  maxAge: 10 * 60 * 1000,
+};
+
 export const authController = {
   async signup(req: Request, res: Response, next: NextFunction) {
     try {
@@ -93,6 +100,23 @@ export const authController = {
         accessToken,
         user,
       }).send(res);
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  async forgotPassword(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { token } = await authService.forgotPassword(req.body);
+
+      if (token) {
+        res.cookie("resetOtpToken", token, RESET_OTP_COOKIE_OPTIONS);
+      }
+
+      return new ApiResponse(
+        200,
+        "If this email is registered, a password reset code has been sent",
+      ).send(res);
     } catch (err) {
       next(err);
     }
