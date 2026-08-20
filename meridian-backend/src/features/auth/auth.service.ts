@@ -3,6 +3,7 @@ import {
   signAccessToken,
   signRefreshToken,
   signVerificationToken,
+  verifyRefreshToken,
   verifyVerificationToken,
 } from "../../lib/token";
 import { generateOtp } from "../../utils/generateOtp";
@@ -192,5 +193,75 @@ export const authService = {
         fullName: user.fullName,
       },
     };
+  },
+
+  async refresh(incomingToken: string) {
+    if (!incomingToken) {
+      throw ApiError.unauthorized("No refresh token provided");
+    }
+
+    let decoded;
+
+    try {
+      decoded = verifyRefreshToken(incomingToken);
+    } catch {
+      throw ApiError.unauthorized("Verification session expired");
+    }
+
+    const session = await Session.findById(decoded.sessionId);
+
+    if (!session) {
+      await Session.deleteMany({ userId: decoded.userId });
+      throw ApiError.unauthorized("Session invalid. Please log in again.");
+    }
+
+    const incomingHash = crypto
+      .createHash("sha256")
+      .update(incomingToken)
+      .digest("hex");
+
+    if (incomingHash !== session.refreshTokenHash) {
+      await Session.deleteMany({ userId: decoded.userId });
+      throw ApiError.unauthorized("Session invalid. Please log in again.");
+    }
+
+    await Session.deleteOne({ _id: session._id });
+
+    const newSession = await Session.create({
+      userId: session.userId.toString(),
+      refreshTokenHash: "pending",
+      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    });
+
+    const newRefreshToken = signRefreshToken(
+      session.userId.toString(),
+      newSession._id.toString(),
+    );
+    newSession.refreshTokenHash = crypto
+      .createHash("sha256")
+      .update(newRefreshToken)
+      .digest("hex");
+    await newSession.save();
+
+    const newAccessToken = signAccessToken(session.userId.toString());
+
+    return {
+      accessToken: newAccessToken,
+      refreshToken: newRefreshToken,
+    };
+  },
+
+  async logout(incomingToken: string) {
+    if (!incomingToken) return;
+
+    let decoded;
+
+    try {
+      decoded = verifyRefreshToken(incomingToken);
+    } catch {
+      throw ApiError.unauthorized("Verification session expired");
+    }
+
+    await Session.deleteOne({ _id: decoded.sessionId });
   },
 };
