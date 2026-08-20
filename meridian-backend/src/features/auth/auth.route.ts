@@ -15,6 +15,8 @@ router.post("/login", validate(loginSchema), authController.login);
 
 router.post("/forgot-password", validate(forgotPasswordSchema), authController.forgotPassword);
 
+router.post("/verify-reset-otp", validate(verifyOtpSchema), authController.verifyResetOtp);
+
 router.post("/refresh", authController.refresh);
 
 router.post("/logout", authController.logout);

@@ -25,6 +25,13 @@ const RESET_OTP_COOKIE_OPTIONS: CookieOptions = {
   maxAge: 10 * 60 * 1000,
 };
 
+const RESET_AUTHORIZED_COOKIE_OPTIONS: CookieOptions = {
+  httpOnly: true,
+  secure: env.nodeEnv === "production",
+  sameSite: "lax",
+  maxAge: 10 * 60 * 1000,
+};
+
 export const authController = {
   async signup(req: Request, res: Response, next: NextFunction) {
     try {
@@ -116,6 +123,34 @@ export const authController = {
       return new ApiResponse(
         200,
         "If this email is registered, a password reset code has been sent",
+      ).send(res);
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  async verifyResetOtp(req: Request, res: Response, next: NextFunction) {
+    try {
+      const token = req.cookies.resetOtpToken;
+
+      if (!token) {
+        throw ApiError.unauthorized("Reset session expired");
+      }
+
+      const { resetAuthorizedToken } = await authService.verifyResetOtp(
+        req.body,
+        token,
+      );
+
+      res.cookie(
+        "resetAuthorizedToken",
+        resetAuthorizedToken,
+        RESET_AUTHORIZED_COOKIE_OPTIONS,
+      );
+
+      return new ApiResponse(
+        200,
+        "Code verified. You can now set a new password.",
       ).send(res);
     } catch (err) {
       next(err);
