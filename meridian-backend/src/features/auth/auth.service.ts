@@ -85,6 +85,10 @@ export const authService = {
       throw ApiError.unauthorized("Verification session expired");
     }
 
+    if (result.purpose !== "email_verification") {
+      throw ApiError.unauthorized("Invalid verification session");
+    }
+
     const otpRecord = await Otp.findOne({
       userId: result.userId,
       purpose: "email_verification",
@@ -95,7 +99,10 @@ export const authService = {
     }
 
     if (otpRecord.expiresAt < new Date()) {
-      await Otp.deleteOne({ userId: result.userId });
+      await Otp.deleteOne({
+        userId: result.userId,
+        purpose: "email_verification",
+      });
       throw ApiError.badRequest("Verification code has expired");
     }
 
@@ -109,7 +116,10 @@ export const authService = {
       { $new: true },
     );
 
-    await Otp.deleteOne({ userId: result.userId });
+    await Otp.deleteOne({
+      userId: result.userId,
+      purpose: "email_verification",
+    });
 
     return {
       user,
@@ -297,5 +307,48 @@ export const authService = {
     const token = signVerificationToken(user._id.toString(), "password_reset");
 
     return { token };
+  },
+
+  async verifyResetOtp(input: VerifyOtpInput, token: string) {
+    let result;
+
+    try {
+      result = verifyVerificationToken(token);
+    } catch {
+      throw ApiError.unauthorized("Reset session expired");
+    }
+
+    if (result.purpose !== "password_reset") {
+      throw ApiError.unauthorized("Invalid reset session");
+    }
+
+    const otpRecord = await Otp.findOne({
+      userId: result.userId,
+      purpose: "password_reset",
+    });
+
+    if (!otpRecord) {
+      throw ApiError.badRequest("Invalid or expired verification code");
+    }
+
+    if (otpRecord.expiresAt < new Date()) {
+      await Otp.deleteOne({ userId: result.userId, purpose: "password_reset" });
+      throw ApiError.badRequest("Verification code has expired");
+    }
+
+    if (otpRecord.code !== input.otp) {
+      throw ApiError.badRequest("Incorrect verification code");
+    }
+
+    await Otp.deleteOne({ userId: result.userId, purpose: "password_reset" });
+
+    const resetAuthorizedToken = signVerificationToken(
+      result.userId,
+      "password_reset_authorized",
+    );
+
+    return {
+      resetAuthorizedToken,
+    };
   },
 };
