@@ -28,37 +28,67 @@ export function SignupForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <div>
-        <Label htmlFor="fullName">Full Name</Label>
-        <Input id="fullName" {...register("fullName")} />
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="fullName" className="text-muted-foreground text-xs">
+          FULL NAME
+        </Label>
+        <Input
+          id="fullName"
+          {...register("fullName")}
+          className="rounded-sm py-5  focus:border-blue-500"
+          placeholder="John Doe"
+        />
         {errors.fullName && (
           <p className="text-sm text-red-500">{errors.fullName.message}</p>
         )}
       </div>
 
-      <div>
-        <Label htmlFor="email">Email</Label>
-        <Input id="email" type="email" {...register("email")} />
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="email" className="text-muted-foreground text-xs">
+          EMAIL
+        </Label>
+        <Input
+          id="email"
+          type="email"
+          {...register("email")}
+          className="rounded-sm py-5"
+          placeholder="johndoe@gmail.com"
+        />
         {errors.email && (
           <p className="text-sm text-red-500">{errors.email.message}</p>
         )}
       </div>
 
-      <div>
-        <Label htmlFor="password">Password</Label>
-        <Input id="password" type="password" {...register("password")} />
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="password" className="text-muted-foreground text-xs">
+          PASSWORD
+        </Label>
+        <Input
+          id="password"
+          type="password"
+          {...register("password")}
+          className="rounded-sm py-5"
+          placeholder="Create a strong password"
+        />
         {errors.password && (
           <p className="text-sm text-red-500">{errors.password.message}</p>
         )}
       </div>
 
-      <div>
-        <Label htmlFor="confirmPassword">Confirm Password</Label>
+      <div className="flex flex-col gap-2">
+        <Label
+          htmlFor="confirmPassword"
+          className="text-muted-foreground text-xs"
+        >
+          CONFIRM PASSWORD
+        </Label>
         <Input
           id="confirmPassword"
           type="password"
           {...register("confirmPassword")}
+          className="rounded-sm py-5"
+          placeholder="Confirm your password"
         />
         {errors.confirmPassword && (
           <p className="text-sm text-red-500">
@@ -73,8 +103,12 @@ export function SignupForm() {
         </p>
       )}
 
-      <Button type="submit" disabled={isPending}>
-        {isPending ? "Signing up..." : "Sign up"}
+      <Button
+        type="submit"
+        disabled={isPending}
+        className="w-full md:w-[390] px-6 py-5 rounded-sm cursor-pointer"
+      >
+        {isPending ? "Creating..." : "Create account"}
       </Button>
     </form>
   );
