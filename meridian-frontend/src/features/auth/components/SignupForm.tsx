@@ -1,4 +1,4 @@
-"use-client";
+"use client";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -46,7 +46,7 @@ export function SignupForm() {
       </div>
 
       <div>
-        <Label htmlFor="password">Email</Label>
+        <Label htmlFor="password">Password</Label>
         <Input id="password" type="password" {...register("password")} />
         {errors.password && (
           <p className="text-sm text-red-500">{errors.password.message}</p>
@@ -54,7 +54,7 @@ export function SignupForm() {
       </div>
 
       <div>
-        <Label htmlFor="confirmPassword">Email</Label>
+        <Label htmlFor="confirmPassword">Confirm Password</Label>
         <Input
           id="confirmPassword"
           type="password"
