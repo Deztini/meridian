@@ -1,9 +1,22 @@
 import { apiClient } from "@/lib/api";
-import { SignupPayload, SignupResponse } from "../types";
+import {
+  SignupPayload,
+  SignupResponse,
+  VerifyPayload,
+  VerifyResponse,
+} from "../types";
 
 export async function signup(payload: SignupPayload): Promise<SignupResponse> {
   const { data } = await apiClient.post<SignupResponse>(
     "/auth/signup",
+    payload,
+  );
+  return data;
+}
+
+export async function verify(payload: VerifyPayload): Promise<VerifyResponse> {
+  const { data } = await apiClient.post<VerifyResponse>(
+    "/auth/verify-otp",
     payload,
   );
   return data;

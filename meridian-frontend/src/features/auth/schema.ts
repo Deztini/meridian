@@ -21,4 +21,12 @@ export const signupSchema = z
     path: ["confirmPassword"],
   });
 
+export const verifyOtpSchema = z.object({
+  otp: z
+    .string()
+    .length(6, "OTP must be 6 digits")
+    .regex(/^\d+$/, "OTP must contain only numbers"),
+});
+
 export type SignupFormValues = z.infer<typeof signupSchema>;
+export type VerifyOtpFormValues = z.infer<typeof verifyOtpSchema>;
