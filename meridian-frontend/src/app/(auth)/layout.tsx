@@ -1,5 +1,5 @@
-import { AuthFooter } from "@/features/auth/components/AuthFooter";
-import { AuthNav } from "@/features/auth/components/AuthNav";
+import { AuthFooter } from "@/features/auth/components/auth-footer";
+import { AuthNav } from "@/features/auth/components/auth-nav";
 import { ReactNode } from "react";
 
 export default function AuthLayout({

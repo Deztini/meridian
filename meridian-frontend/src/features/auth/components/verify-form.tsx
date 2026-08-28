@@ -1,7 +1,9 @@
+"use client";
+
 import { Controller, useForm } from "react-hook-form";
 import { VerifyOtpFormValues, verifyOtpSchema } from "../schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useVerify } from "../hooks/useVerify";
+import { useVerify } from "../hooks/use-verify";
 import {
   InputOTP,
   InputOTPGroup,
@@ -32,9 +34,9 @@ export function VerifyForm() {
         control={control}
         render={({ field }) => (
           <InputOTP maxLength={6} value={field.value} onChange={field.onChange}>
-            <InputOTPGroup>
+            <InputOTPGroup className="gap-3">
               {Array.from({ length: 6 }).map((_, i) => (
-                <InputOTPSlot key={i} index={i} />
+                <InputOTPSlot key={i} index={i} className="h-14 w-14 rounded-md border"/>
               ))}
             </InputOTPGroup>
           </InputOTP>
@@ -51,7 +53,7 @@ export function VerifyForm() {
       <Button
         type="submit"
         disabled={isPending}
-        className="w-full md:w-[390] px-6 py-5 rounded-sm cursor-pointer"
+        className="w-full md:w-[400] px-6 py-5 rounded-sm cursor-pointer"
       >
         {isPending ? "Verifying..." : "Verify"}
       </Button>
