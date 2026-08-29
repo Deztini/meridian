@@ -28,5 +28,11 @@ export const verifyOtpSchema = z.object({
     .regex(/^\d+$/, "OTP must contain only numbers"),
 });
 
+export const loginSchema = z.object({
+  email: z.string().email("Invalid email address").toLowerCase().trim(),
+  password: z.string().min(1, "Password is required"),
+});
+
 export type SignupFormValues = z.infer<typeof signupSchema>;
 export type VerifyOtpFormValues = z.infer<typeof verifyOtpSchema>;
+export type LoginFormValues = z.infer<typeof loginSchema>;
