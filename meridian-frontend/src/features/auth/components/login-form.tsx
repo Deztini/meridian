@@ -1,3 +1,5 @@
+"use client";
+
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -71,12 +73,12 @@ export function LoginForm() {
         </Button>
       </form>
 
-      <div>
+      <div className="flex justify-end">
         <Link
           href="/"
-          className="text-muted-foreground hover:text-blue-600 cursor-pointer"
+          className="text-sm text-muted-foreground hover:text-blue-600 cursor-pointer"
         >
-          Forgot Password?
+          Forgot password?
         </Link>
       </div>
     </div>
