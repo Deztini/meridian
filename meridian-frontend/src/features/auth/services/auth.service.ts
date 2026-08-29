@@ -7,6 +7,8 @@ import {
   ResendOtpResponse,
   LoginPayload,
   LoginResponse,
+  ForgotPasswordPayload,
+  ForgotPasswordResponse,
 } from "../types";
 
 export async function signup(payload: SignupPayload): Promise<SignupResponse> {
@@ -32,5 +34,15 @@ export async function resendOtp(): Promise<ResendOtpResponse> {
 
 export async function login(payload: LoginPayload): Promise<LoginResponse> {
   const { data } = await apiClient.post<LoginResponse>("/auth/login", payload);
+  return data;
+}
+
+export async function forgotPassword(
+  payload: ForgotPasswordPayload,
+): Promise<ForgotPasswordResponse> {
+  const { data } = await apiClient.post<ForgotPasswordResponse>(
+    "/auth/forgot-password",
+    payload,
+  );
   return data;
 }
