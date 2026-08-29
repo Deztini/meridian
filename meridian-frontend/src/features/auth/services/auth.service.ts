@@ -5,6 +5,8 @@ import {
   VerifyPayload,
   VerifyResponse,
   ResendOtpResponse,
+  LoginPayload,
+  LoginResponse,
 } from "../types";
 
 export async function signup(payload: SignupPayload): Promise<SignupResponse> {
@@ -25,5 +27,10 @@ export async function verify(payload: VerifyPayload): Promise<VerifyResponse> {
 
 export async function resendOtp(): Promise<ResendOtpResponse> {
   const { data } = await apiClient.post<ResendOtpResponse>("/auth/resend-otp");
+  return data;
+}
+
+export async function login(payload: LoginPayload): Promise<LoginResponse> {
+  const { data } = await apiClient.post<LoginResponse>("/auth/login", payload);
   return data;
 }
