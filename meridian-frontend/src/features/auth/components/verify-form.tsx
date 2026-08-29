@@ -10,6 +10,8 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { useResendOtp } from "../hooks/useResendOtp";
 
 export function VerifyForm() {
   const {
@@ -21,11 +23,36 @@ export function VerifyForm() {
     defaultValues: { otp: "" },
   });
 
+  const [counter, setCounter] = useState(0);
+
   const { mutate, isPending, error } = useVerify();
+  const {
+    mutate: mutateResend,
+    isPending: ResendIsPending,
+    error: resendError,
+  } = useResendOtp();
 
   const onSubmit = (value: VerifyOtpFormValues) => {
     mutate(value);
   };
+
+  const onResend = () => {
+    mutateResend();
+    setCounter(60);
+  };
+
+  useEffect(() => {
+    if (counter <= 0) return;
+
+    let timer: ReturnType<typeof setTimeout>;
+    if (counter > 0) {
+      timer = setTimeout(() => {
+        setCounter((prev) => prev - 1);
+      }, 1000);
+    }
+
+    return () => clearTimeout(timer);
+  }, [counter]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -69,11 +96,22 @@ export function VerifyForm() {
       </form>
 
       <div className="flex gap-2 items-center ml-2">
-        <span className="text-xs text-muted-foreground">
+        <div className="text-xs text-muted-foreground">
           Didn't receive the code?
-        </span>
-        <div className="text-blue-600 hover:underline cursor-pointer">
-          Resend code
+        </div>
+        <div>
+          {counter > 0 ? (
+            <span className="text-xs text-gray-400">
+              Resend in {`${counter}s`}
+            </span>
+          ) : (
+            <div
+              onClick={onResend}
+              className="text-blue-600 hover:underline cursor-pointer"
+            >
+              Resend code
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -7,8 +7,11 @@ import { useSignup } from "../hooks/useSignup";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export function SignupForm() {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -23,9 +26,11 @@ export function SignupForm() {
     mutate(values);
   };
 
-  if (isSuccess) {
-    return <p>Check your email for verification code</p>;
-  }
+  useEffect(() => {
+    if (isSuccess) {
+      router.push("/verify");
+    }
+  }, [isSuccess, router]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
