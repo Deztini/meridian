@@ -14,6 +14,10 @@ export interface LoginPayload {
   password: string;
 }
 
+export interface ForgotPasswordPayload {
+  email: string;
+}
+
 export interface SignupResponse {
   success: boolean;
   message: boolean;
@@ -47,4 +51,9 @@ export interface LoginResponse {
       fullName: string;
     };
   };
+}
+
+export interface ForgotPasswordResponse {
+  success: boolean;
+  message: boolean;
 }
