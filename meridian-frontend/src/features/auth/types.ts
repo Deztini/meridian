@@ -25,3 +25,8 @@ export interface VerifyResponse {
     };
   };
 }
+
+export interface ResendOtpResponse {
+  success: boolean;
+  message: boolean;
+}
