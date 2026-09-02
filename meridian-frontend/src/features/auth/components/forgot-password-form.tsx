@@ -52,7 +52,7 @@ export function ForgotPasswordForm() {
         disabled={isPending}
         className="w-full md:w-[390] px-6 py-5 rounded-sm cursor-pointer"
       >
-        {isPending ? "Sending..." : "Send reset link"}
+        {isPending ? "Sending..." : "Send reset code"}
       </Button>
     </form>
   );
