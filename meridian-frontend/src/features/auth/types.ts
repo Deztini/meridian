@@ -1,3 +1,5 @@
+export type OtpFlow = "signup" | "reset-password";
+
 export interface SignupPayload {
   fullName: string;
   email: string;

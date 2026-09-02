@@ -5,7 +5,7 @@ export default function ForgotPasswordPage() {
   return (
     <div className="w-full max-w-sm space-y-6">
       <BackButton buttonText="Back to sign in" />
-      <div className="flex flex-col gap-2 mb-8">
+      <div className="flex flex-col gap-2 mb-4">
         <span className="text-xl text-black font-medium">
           Forgot your password?
         </span>

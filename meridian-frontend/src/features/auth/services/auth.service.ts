@@ -46,3 +46,20 @@ export async function forgotPassword(
   );
   return data;
 }
+
+export async function verifyResetOtp(
+  payload: VerifyPayload,
+): Promise<ResendOtpResponse> {
+  const { data } = await apiClient.post<ResendOtpResponse>(
+    "/auth/verify-reset-otp",
+    payload,
+  );
+  return data;
+}
+
+export async function resendResetOtp(): Promise<ResendOtpResponse> {
+  const { data } = await apiClient.post<ResendOtpResponse>(
+    "/auth/resend-reset-otp",
+  );
+  return data;
+}
