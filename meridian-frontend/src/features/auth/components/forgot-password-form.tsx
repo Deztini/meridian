@@ -7,8 +7,11 @@ import { useForm } from "react-hook-form";
 import { ForgotPasswordFormValues, forgotPasswordSchema } from "../schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForgotPassword } from "../hooks/useForgotPassword";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export function ForgotPasswordForm() {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -17,11 +20,17 @@ export function ForgotPasswordForm() {
     resolver: zodResolver(forgotPasswordSchema),
   });
 
-  const { mutate, isPending, error } = useForgotPassword();
+  const { mutate, isPending, isSuccess, error } = useForgotPassword();
 
   const onSubmit = (values: ForgotPasswordFormValues) => {
     mutate(values);
   };
+
+    useEffect(() => {
+      if (isSuccess) {
+        router.push("/verify?flow=reset-password");
+      }
+    }, [isSuccess, router]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">

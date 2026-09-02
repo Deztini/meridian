@@ -1,8 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
-import { resendOtp } from "../services/auth.service";
+import { resendOtp, resendResetOtp } from "../services/auth.service";
+import { OtpFlow } from "../types";
 
-export function useResendOtp() {
+export function useResendOtp(flow: OtpFlow) {
   return useMutation({
-    mutationFn: () => resendOtp(),
+    mutationFn: () =>
+      flow === "reset-password" ? resendResetOtp() : resendOtp(),
   });
 }

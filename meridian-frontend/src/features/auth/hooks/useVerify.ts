@@ -1,9 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
-import { VerifyPayload } from "../types";
-import { verify } from "../services/auth.service";
+import { OtpFlow, VerifyPayload } from "../types";
+import { verify, verifyResetOtp } from "../services/auth.service";
 
-export function useVerify() {
+export function useVerify(flow: OtpFlow) {
   return useMutation({
-    mutationFn: (payload: VerifyPayload) => verify(payload),
+    mutationFn: (payload: VerifyPayload) =>
+      flow === "reset-password" ? verifyResetOtp(payload) : verify(payload),
   });
 }

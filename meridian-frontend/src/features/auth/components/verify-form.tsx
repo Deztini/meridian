@@ -12,8 +12,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { useResendOtp } from "../hooks/useResendOtp";
+import { useRouter, useSearchParams } from "next/navigation";
+import { OtpFlow } from "../types";
 
 export function VerifyForm() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const {
     control,
     handleSubmit,
@@ -23,14 +27,16 @@ export function VerifyForm() {
     defaultValues: { otp: "" },
   });
 
+  const flow = (searchParams.get("flow") as OtpFlow) ?? "signup";
+
   const [counter, setCounter] = useState(0);
 
-  const { mutate, isPending, error } = useVerify();
+  const { mutate, isPending, isSuccess, error } = useVerify(flow);
   const {
     mutate: mutateResend,
     isPending: ResendIsPending,
     error: resendError,
-  } = useResendOtp();
+  } = useResendOtp(flow);
 
   const onSubmit = (value: VerifyOtpFormValues) => {
     mutate(value);
@@ -53,6 +59,16 @@ export function VerifyForm() {
 
     return () => clearTimeout(timer);
   }, [counter]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      if (flow === "reset-password") {
+        router.push("/reset-password");
+      } else {
+        router.push("/login");
+      }
+    }
+  }, [isSuccess, router, flow]);
 
   return (
     <div className="flex flex-col gap-6">
