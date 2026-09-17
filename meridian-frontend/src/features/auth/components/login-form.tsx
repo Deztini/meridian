@@ -4,6 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
+import { Loader2 } from "lucide-react";
 import { LoginFormValues, loginSchema } from "../schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLogin } from "../hooks/useLogin";
@@ -28,7 +29,10 @@ export function LoginForm() {
     <div className="flex flex-col gap-3">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="flex flex-col gap-2">
-          <Label htmlFor="email" className="text-muted-foreground text-xs font-sans">
+          <Label
+            htmlFor="email"
+            className="text-muted-foreground text-xs font-sans"
+          >
             EMAIL
           </Label>
           <Input
@@ -39,12 +43,17 @@ export function LoginForm() {
             placeholder="johndoe@gmail.com"
           />
           {errors.email && (
-            <p className="text-sm text-red-500 font-sans">{errors.email.message}</p>
+            <p className="text-sm text-red-500 font-sans">
+              {errors.email.message}
+            </p>
           )}
         </div>
 
         <div className="flex flex-col gap-2">
-          <Label htmlFor="password" className="text-muted-foreground text-xs font-sans">
+          <Label
+            htmlFor="password"
+            className="text-muted-foreground text-xs font-sans"
+          >
             PASSWORD
           </Label>
           <PasswordInput
@@ -54,7 +63,9 @@ export function LoginForm() {
             placeholder="Create a strong password"
           />
           {errors.password && (
-            <p className="text-sm text-red-500 font-sans">{errors.password.message}</p>
+            <p className="text-sm text-red-500 font-sans">
+              {errors.password.message}
+            </p>
           )}
         </div>
 
@@ -69,7 +80,7 @@ export function LoginForm() {
           disabled={isPending}
           className="w-full md:w-[390] px-6 py-5 rounded-sm cursor-pointer font-sans"
         >
-          {isPending ? "Signing..." : "Sign in"}
+          {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Sign in"}
         </Button>
       </form>
 

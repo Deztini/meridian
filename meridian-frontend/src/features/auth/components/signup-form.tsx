@@ -7,6 +7,7 @@ import { useSignup } from "../hooks/useSignup";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { PasswordInput } from "../../../components/password-input";
@@ -112,7 +113,7 @@ export function SignupForm() {
         disabled={isPending}
         className="w-full md:w-[390] px-6 py-5 rounded-sm cursor-pointer font-sans"
       >
-        {isPending ? "Creating..." : "Create account"}
+        {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Create account"}
       </Button>
     </form>
   );

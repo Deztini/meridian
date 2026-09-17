@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { Label } from "@/components/ui/label";
 import { PasswordInput } from "@/components/password-input";
 import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 
 export function ResetPasswordForm() {
   const router = useRouter();
@@ -79,7 +80,7 @@ export function ResetPasswordForm() {
         disabled={isPending}
         className="w-full md:w-[390] px-6 py-5 rounded-sm cursor-pointer font-sans"
       >
-        {isPending ? "Updating..." : "Update password"}
+        {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Update password"}
       </Button>
     </form>
   );

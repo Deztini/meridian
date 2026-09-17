@@ -3,6 +3,7 @@
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { ForgotPasswordFormValues, forgotPasswordSchema } from "../schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -61,7 +62,7 @@ export function ForgotPasswordForm() {
         disabled={isPending}
         className="w-full md:w-[390] px-6 py-5 rounded-sm cursor-pointer font-sans"
       >
-        {isPending ? "Sending..." : "Send reset code"}
+        {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Send reset code"}
       </Button>
     </form>
   );

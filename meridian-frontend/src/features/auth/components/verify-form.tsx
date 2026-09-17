@@ -10,6 +10,7 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useResendOtp } from "../hooks/useResendOtp";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -107,7 +108,7 @@ export function VerifyForm() {
           disabled={isPending}
           className="w-full md:w-[400] px-6 py-5 rounded-sm cursor-pointer font-sans"
         >
-          {isPending ? "Verifying..." : "Verify"}
+          {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Verify"}
         </Button>
       </form>
 
