@@ -8,7 +8,7 @@ import { LoginFormValues, loginSchema } from "../schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLogin } from "../hooks/useLogin";
 import Link from "next/link";
-import { PasswordInput } from "./password-input";
+import { PasswordInput } from "../../../components/password-input";
 
 export function LoginForm() {
   const {

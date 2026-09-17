@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { PasswordInput } from "./password-input";
+import { PasswordInput } from "../../../components/password-input";
 
 export function SignupForm() {
   const router = useRouter();
@@ -71,10 +71,7 @@ export function SignupForm() {
           PASSWORD
         </Label>
         <PasswordInput
-          id="password"
-          {...register("password")}
-          className="rounded-sm py-5"
-          placeholder="Create a strong password"
+        
         />
         {errors.password && (
           <p className="text-sm text-red-500">{errors.password.message}</p>
