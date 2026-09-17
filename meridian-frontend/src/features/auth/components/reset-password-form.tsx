@@ -35,7 +35,7 @@ export function ResetPasswordForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <div className="flex flex-col gap-2">
-        <Label htmlFor="newPassword" className="text-muted-foreground text-xs">
+        <Label htmlFor="newPassword" className="text-muted-foreground text-xs font-sans">
           NEW PASSWORD
         </Label>
         <PasswordInput
@@ -45,13 +45,13 @@ export function ResetPasswordForm() {
           placeholder="••••••••"
         />
         {errors.newPassword && (
-          <p className="text-sm text-red-500">{errors.newPassword.message}</p>
+          <p className="text-sm text-red-500 font-sans">{errors.newPassword.message}</p>
         )}
       </div>
       <div className="flex flex-col gap-2">
         <Label
           htmlFor="confirmPassword"
-          className="text-muted-foreground text-xs"
+          className="text-muted-foreground text-xs font-sans"
         >
           CONFIRM PASSWORD
         </Label>
@@ -62,14 +62,14 @@ export function ResetPasswordForm() {
           placeholder="••••••••"
         />
         {errors.confirmNewPassword && (
-          <p className="text-sm text-red-500">
+          <p className="text-sm text-red-500 font-sans">
             {errors.confirmNewPassword.message}
           </p>
         )}
       </div>
 
       {error && (
-        <p className="text-sm text-red-500">
+        <p className="text-sm text-red-500 font-sans">
           Something went wrong. Please try again
         </p>
       )}
@@ -77,7 +77,7 @@ export function ResetPasswordForm() {
       <Button
         type="submit"
         disabled={isPending}
-        className="w-full md:w-[390] px-6 py-5 rounded-sm cursor-pointer"
+        className="w-full md:w-[390] px-6 py-5 rounded-sm cursor-pointer font-sans"
       >
         {isPending ? "Updating..." : "Update password"}
       </Button>

@@ -5,12 +5,12 @@ export default function SignupPage() {
   return (
     <div className="w-full max-w-sm space-y-6">
       <div className="space-y-1">
-        <h1 className="text-2xl ">Create your account</h1>
+        <h1 className="text-2xl font-heading">Create your account</h1>
         <div className="flex gap-2 items-center">
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-muted-foreground font-sans">
             Already have an account?
           </p>
-          <Link href={"/"} className="text-blue-600">
+          <Link href={"/"} className="text-blue-600 font-sans">
             Sign in
           </Link>
         </div>

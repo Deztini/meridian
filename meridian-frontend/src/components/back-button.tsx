@@ -8,7 +8,7 @@ export function BackButton({ buttonText }: { buttonText: string }) {
 
   return (
     <button
-      className="flex items-center  gap-1 text-sm text-muted-foreground hover:text-foreground"
+      className="flex items-center  gap-1 text-sm text-muted-foreground hover:text-foreground font-sans"
       onClick={() => router.back()}
     >
       <ArrowLeft />

@@ -96,34 +96,34 @@ export function VerifyForm() {
         />
 
         {errors.otp && (
-          <p className="text-sm text-red-500">{errors.otp.message}</p>
+          <p className="text-sm text-red-500 font-sans">{errors.otp.message}</p>
         )}
         {error && (
-          <p className="text-sm text-red-500">Invalid or expired code.</p>
+          <p className="text-sm text-red-500 font-sans">Invalid or expired code.</p>
         )}
 
         <Button
           type="submit"
           disabled={isPending}
-          className="w-full md:w-[400] px-6 py-5 rounded-sm cursor-pointer"
+          className="w-full md:w-[400] px-6 py-5 rounded-sm cursor-pointer font-sans"
         >
           {isPending ? "Verifying..." : "Verify"}
         </Button>
       </form>
 
       <div className="flex gap-2 items-center ml-2">
-        <div className="text-xs text-muted-foreground">
+        <div className="text-xs text-muted-foreground font-sans">
           Didn't receive the code?
         </div>
         <div>
           {counter > 0 ? (
-            <span className="text-xs text-gray-400">
+            <span className="text-xs text-gray-400 font-sans">
               Resend in {`${counter}s`}
             </span>
           ) : (
             <div
               onClick={onResend}
-              className="text-blue-600 hover:underline cursor-pointer"
+              className="text-blue-600 hover:underline cursor-pointer font-sans"
             >
               Resend code
             </div>

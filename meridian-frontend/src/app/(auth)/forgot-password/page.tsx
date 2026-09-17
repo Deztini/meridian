@@ -5,11 +5,11 @@ export default function ForgotPasswordPage() {
   return (
     <div className="w-full max-w-sm space-y-6">
       <BackButton buttonText="Back to sign in" />
-      <div className="flex flex-col gap-2 mb-4">
-        <span className="text-xl text-black font-medium">
+      <div className="flex flex-col gap-2 mb-6">
+        <span className="text-2xl text-black font-heading">
           Forgot your password?
         </span>
-        <span className="text-muted-foreground text-sm">
+        <span className="text-muted-foreground text-sm font-sans">
           Enter your account email and we'll send you a reset code.
         </span>
       </div>

@@ -28,7 +28,7 @@ export function LoginForm() {
     <div className="flex flex-col gap-3">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="flex flex-col gap-2">
-          <Label htmlFor="email" className="text-muted-foreground text-xs">
+          <Label htmlFor="email" className="text-muted-foreground text-xs font-sans">
             EMAIL
           </Label>
           <Input
@@ -39,12 +39,12 @@ export function LoginForm() {
             placeholder="johndoe@gmail.com"
           />
           {errors.email && (
-            <p className="text-sm text-red-500">{errors.email.message}</p>
+            <p className="text-sm text-red-500 font-sans">{errors.email.message}</p>
           )}
         </div>
 
         <div className="flex flex-col gap-2">
-          <Label htmlFor="password" className="text-muted-foreground text-xs">
+          <Label htmlFor="password" className="text-muted-foreground text-xs font-sans">
             PASSWORD
           </Label>
           <PasswordInput
@@ -54,12 +54,12 @@ export function LoginForm() {
             placeholder="Create a strong password"
           />
           {errors.password && (
-            <p className="text-sm text-red-500">{errors.password.message}</p>
+            <p className="text-sm text-red-500 font-sans">{errors.password.message}</p>
           )}
         </div>
 
         {error && (
-          <p className="text-sm text-red-500">
+          <p className="text-sm text-red-500 font-sans">
             Something went wrong. Please try again
           </p>
         )}
@@ -67,7 +67,7 @@ export function LoginForm() {
         <Button
           type="submit"
           disabled={isPending}
-          className="w-full md:w-[390] px-6 py-5 rounded-sm cursor-pointer"
+          className="w-full md:w-[390] px-6 py-5 rounded-sm cursor-pointer font-sans"
         >
           {isPending ? "Signing..." : "Sign in"}
         </Button>
@@ -76,7 +76,7 @@ export function LoginForm() {
       <div className="flex justify-end">
         <Link
           href="/forgot-password"
-          className="text-sm text-muted-foreground hover:text-blue-600 cursor-pointer"
+          className="text-sm text-muted-foreground hover:text-blue-600 cursor-pointer font-sans"
         >
           Forgot password?
         </Link>
