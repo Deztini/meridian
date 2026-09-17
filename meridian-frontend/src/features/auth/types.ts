@@ -20,10 +20,16 @@ export interface ForgotPasswordPayload {
   email: string;
 }
 
-export interface SignupResponse {
+export interface ResetPasswordPayload {
+  newPassword: string;
+  confirmNewPassword: string;
+}
+
+export interface GenericResponse {
   success: boolean;
   message: boolean;
 }
+
 
 export interface VerifyResponse {
   success: boolean;
@@ -37,10 +43,6 @@ export interface VerifyResponse {
   };
 }
 
-export interface ResendOtpResponse {
-  success: boolean;
-  message: boolean;
-}
 
 export interface LoginResponse {
   success: boolean;
@@ -55,7 +57,3 @@ export interface LoginResponse {
   };
 }
 
-export interface ForgotPasswordResponse {
-  success: boolean;
-  message: boolean;
-}

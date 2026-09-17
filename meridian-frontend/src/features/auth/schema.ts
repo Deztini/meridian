@@ -38,7 +38,25 @@ export const forgotPasswordSchema = z.object({
   email: z.string().email("Invalid email address").toLowerCase().trim(),
 });
 
+export const resetPasswordSchema = z
+  .object({
+    newPassword: z
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .regex(
+        strongPassword,
+        "Password must contain at least one letter, number, and special character",
+      ),
+    confirmNewPassword: z.string().min(1, "Please confirm your password"),
+  })
+  .refine((data) => data.newPassword === data.confirmNewPassword, {
+    message: "Passwords do not match",
+    path: ["confirmNewPassword"],
+  });
+
+
 export type SignupFormValues = z.infer<typeof signupSchema>;
 export type VerifyOtpFormValues = z.infer<typeof verifyOtpSchema>;
 export type LoginFormValues = z.infer<typeof loginSchema>;
 export type ForgotPasswordFormValues = z.infer<typeof forgotPasswordSchema>;
+export type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>;

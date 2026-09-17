@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { PasswordInput } from "./password-input";
 
 export function SignupForm() {
   const router = useRouter();
@@ -69,9 +70,8 @@ export function SignupForm() {
         <Label htmlFor="password" className="text-muted-foreground text-xs">
           PASSWORD
         </Label>
-        <Input
+        <PasswordInput
           id="password"
-          type="password"
           {...register("password")}
           className="rounded-sm py-5"
           placeholder="Create a strong password"
@@ -88,9 +88,8 @@ export function SignupForm() {
         >
           CONFIRM PASSWORD
         </Label>
-        <Input
+        <PasswordInput
           id="confirmPassword"
-          type="password"
           {...register("confirmPassword")}
           className="rounded-sm py-5"
           placeholder="Confirm your password"

@@ -8,6 +8,7 @@ import { LoginFormValues, loginSchema } from "../schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLogin } from "../hooks/useLogin";
 import Link from "next/link";
+import { PasswordInput } from "./password-input";
 
 export function LoginForm() {
   const {
@@ -46,9 +47,8 @@ export function LoginForm() {
           <Label htmlFor="password" className="text-muted-foreground text-xs">
             PASSWORD
           </Label>
-          <Input
+          <PasswordInput
             id="password"
-            type="password"
             {...register("password")}
             className="rounded-sm py-5"
             placeholder="Create a strong password"

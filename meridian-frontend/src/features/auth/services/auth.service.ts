@@ -1,18 +1,18 @@
 import { apiClient } from "@/lib/api";
 import {
   SignupPayload,
-  SignupResponse,
+  GenericResponse,
   VerifyPayload,
   VerifyResponse,
-  ResendOtpResponse,
   LoginPayload,
   LoginResponse,
   ForgotPasswordPayload,
-  ForgotPasswordResponse,
+  ResetPasswordPayload,
+  
 } from "../types";
 
-export async function signup(payload: SignupPayload): Promise<SignupResponse> {
-  const { data } = await apiClient.post<SignupResponse>(
+export async function signup(payload: SignupPayload): Promise<GenericResponse> {
+  const { data } = await apiClient.post<GenericResponse>(
     "/auth/signup",
     payload,
   );
@@ -27,8 +27,8 @@ export async function verify(payload: VerifyPayload): Promise<VerifyResponse> {
   return data;
 }
 
-export async function resendOtp(): Promise<ResendOtpResponse> {
-  const { data } = await apiClient.post<ResendOtpResponse>("/auth/resend-otp");
+export async function resendOtp(): Promise<GenericResponse> {
+  const { data } = await apiClient.post<GenericResponse>("/auth/resend-otp");
   return data;
 }
 
@@ -39,8 +39,8 @@ export async function login(payload: LoginPayload): Promise<LoginResponse> {
 
 export async function forgotPassword(
   payload: ForgotPasswordPayload,
-): Promise<ForgotPasswordResponse> {
-  const { data } = await apiClient.post<ForgotPasswordResponse>(
+): Promise<GenericResponse> {
+  const { data } = await apiClient.post<GenericResponse>(
     "/auth/forgot-password",
     payload,
   );
@@ -49,17 +49,26 @@ export async function forgotPassword(
 
 export async function verifyResetOtp(
   payload: VerifyPayload,
-): Promise<ResendOtpResponse> {
-  const { data } = await apiClient.post<ResendOtpResponse>(
+): Promise<GenericResponse> {
+  const { data } = await apiClient.post<GenericResponse>(
     "/auth/verify-reset-otp",
     payload,
   );
   return data;
 }
 
-export async function resendResetOtp(): Promise<ResendOtpResponse> {
-  const { data } = await apiClient.post<ResendOtpResponse>(
+export async function resendResetOtp(): Promise<GenericResponse> {
+  const { data } = await apiClient.post<GenericResponse>(
     "/auth/resend-reset-otp",
   );
   return data;
 }
+
+export async function resetPassword(payload: ResetPasswordPayload): Promise<GenericResponse> {
+  const { data } = await apiClient.post<GenericResponse>(
+    "/auth/reset-password",
+    payload
+  );
+  return data;
+}
+
