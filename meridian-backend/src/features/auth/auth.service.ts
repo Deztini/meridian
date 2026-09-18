@@ -378,11 +378,22 @@ export const authService = {
       throw ApiError.unauthorized("Reset session expired. Please try again.");
     }
 
+    const isSamePassword = await bcrypt.compare(
+      input.newPassword,
+      user.password,
+    );
+
+    if (isSamePassword) {
+      throw ApiError.badRequest(
+        "The new password cannot be the same as your current password.",
+      );
+    }
+
     const hashedPw = await bcrypt.hash(input.newPassword, 12);
 
     user.password = hashedPw;
     await user.save();
 
-    await Session.deleteMany({userId: user._id})
+    await Session.deleteMany({ userId: user._id });
   },
 };
