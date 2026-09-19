@@ -99,10 +99,7 @@ export function VerifyForm() {
         {errors.otp && (
           <p className="text-sm text-red-500 font-sans">{errors.otp.message}</p>
         )}
-        {error && (
-          <p className="text-sm text-red-500 font-sans">Invalid or expired code.</p>
-        )}
-
+   
         <Button
           type="submit"
           disabled={isPending}
@@ -114,7 +111,7 @@ export function VerifyForm() {
 
       <div className="flex gap-2 items-center ml-2">
         <div className="text-xs text-muted-foreground font-sans">
-          Didn't receive the code?
+          Didn&apos;t receive the code?
         </div>
         <div>
           {counter > 0 ? (

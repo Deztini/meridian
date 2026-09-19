@@ -51,12 +51,7 @@ export function ForgotPasswordForm() {
         )}
       </div>
 
-      {error && (
-        <p className="text-sm text-red-500 font-sans">
-          Something went wrong. Please try again
-        </p>
-      )}
-
+    
       <Button
         type="submit"
         disabled={isPending}

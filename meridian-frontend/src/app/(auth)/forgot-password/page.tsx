@@ -10,7 +10,7 @@ export default function ForgotPasswordPage() {
           Forgot your password?
         </span>
         <span className="text-muted-foreground text-sm font-sans">
-          Enter your account email and we'll send you a reset code.
+          Enter your account email and we&apos;ll send you a reset code.
         </span>
       </div>
       <ForgotPasswordForm />

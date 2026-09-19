@@ -8,7 +8,7 @@ export default function ForgotPasswordPage() {
           Set a new password
         </span>
         <span className="text-muted-foreground text-sm font-sans">
-          Choose a strong password you haven't used before.
+          Choose a strong password you haven&apos;t used before.
         </span>
       </div>
       <ResetPasswordForm />

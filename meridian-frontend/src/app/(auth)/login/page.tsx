@@ -8,7 +8,7 @@ export default function LoginPage() {
         <h1 className="text-2xl font-normal font-heading">Sign in to Meridian</h1>
         <div className="flex gap-2 items-center">
           <p className="text-sm text-muted-foreground font-sans">
-            Don't have an account?
+            Don&apos;t have an account?
           </p>
           <Link href={"/signup"} className="text-blue-600 hover:underline font-sans">
             Create one
