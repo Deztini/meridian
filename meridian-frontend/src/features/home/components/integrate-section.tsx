@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 
 export function IntegrateSection() {
   return (
-    <div className="bg-black flex items-start justify-between py-16 px-9 my-10">
+    <div className="bg-black flex items-start justify-between py-20 px-9 my-10">
       <div className="flex flex-col gap-8">
         <h1 className="font-sans text-gray-500 text-xs">SDK</h1>
         <h2 className="font-heading text-white text-5xl">
