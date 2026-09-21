@@ -3,6 +3,8 @@ import { HomeNavbar } from "@/features/home/components/home-navbar";
 import { HowItWorksSection } from "@/features/home/components/howitworks-section";
 import { IngestionSection } from "@/features/home/components/ingestion-section";
 import { IntegrateSection } from "@/features/home/components/integrate-section";
+import { InvoiceSection } from "@/features/home/components/invoice-section";
+
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
@@ -11,6 +13,7 @@ export default function Home() {
       <HowItWorksSection />
       <IntegrateSection />
       <IngestionSection />
+      <InvoiceSection />
     </div>
   );
 }
