@@ -1,4 +1,5 @@
 import { HeroSection } from "@/features/home/components/hero-section";
+import { HomeFooter } from "@/features/home/components/home-footer";
 import { HomeNavbar } from "@/features/home/components/home-navbar";
 import { HowItWorksSection } from "@/features/home/components/howitworks-section";
 import { IngestionSection } from "@/features/home/components/ingestion-section";
@@ -16,6 +17,7 @@ export default function Home() {
       <IngestionSection />
       <InvoiceSection />
       <PricingSection />
+      <HomeFooter />
     </div>
   );
 }
