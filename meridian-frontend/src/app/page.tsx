@@ -4,6 +4,7 @@ import { HowItWorksSection } from "@/features/home/components/howitworks-section
 import { IngestionSection } from "@/features/home/components/ingestion-section";
 import { IntegrateSection } from "@/features/home/components/integrate-section";
 import { InvoiceSection } from "@/features/home/components/invoice-section";
+import { PricingSection } from "@/features/home/components/pricing-section";
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
       <IntegrateSection />
       <IngestionSection />
       <InvoiceSection />
+      <PricingSection />
     </div>
   );
 }
