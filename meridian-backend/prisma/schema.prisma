@@ -1,0 +1,57 @@
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+model Customer {
+  id            String      @id
+  name          String      
+  email         String      @unique
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+
+  subscription  Subscription?
+  invoices      Invoice[]
+}
+
+
+model PricingPlan {
+  id            String      @id @default(uuid())
+  name          String      
+  includedUnits Int     
+  overageRate   Decimal     @db.Decimal(10, 4)
+  platformFee   Decimal     @db.Decimal(10, 2)
+
+
+  subscriptions Subscription[]
+}
+
+
+
+model Subscription {
+  id            String       @id @default(uuid())
+  customerId    String       @unique
+  customer      Customer     @relation(fields: [customerId], references: [id])
+  planId        String
+  plan          PricingPlan  @relation(fields: [planId], references: [id])
+  startedAt     DateTime     @default(now())
+}
+
+model Invoice {
+  id            String    @id @default(uuid())
+  customerId    String
+  customer      Customer  @relation(fields: [customerId], references: [id])
+  periodStart   DateTime
+  periodEnd     DateTime
+  usageCount    Int
+  amountDue     Decimal   @db.Decimal(10, 2)
+  status        String    @default("pending")
+  createdAt     DateTime  @default(now())
+}

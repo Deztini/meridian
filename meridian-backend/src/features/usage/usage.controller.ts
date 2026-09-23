@@ -16,9 +16,9 @@ export const usageController = {
       return new ApiResponse(201, "Usage event recorded", {
         event: {
           eventType: usageEvent.event,
-          timestamp: usageEvent.timeStamps,
+          timestamp: usageEvent.timestamp,
         },
-      });
+      }).send(res);
     } catch (error) {
       next(error);
     }

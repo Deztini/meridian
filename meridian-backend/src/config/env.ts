@@ -4,6 +4,7 @@ export const env = {
   port: process.env.PORT ?? 4000,
   nodeEnv: process.env.NODE_ENV,
   databaseUrl: process.env.MONGODB_URI!,
+  postgresDatabaseUrl: process.env.DATABASE_URL!,
   clientOrigin: process.env.CLIENT_ORIGIN,
   jwtVerifySecret: process.env.JWT_VERIFY_SECRET!,
   jwtRefreshSecret: process.env.JWT_REFRESH_SECRET!,

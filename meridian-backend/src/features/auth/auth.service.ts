@@ -20,6 +20,7 @@ import { ApiError } from "../../utils/ApiError";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
 import { Session } from "./auth.session.model";
+import { prisma } from "../../lib/prisma";
 
 export const authService = {
   async signup(input: SignupInput) {
@@ -57,6 +58,21 @@ export const authService = {
       fullName: input.fullName,
       password: hashedPw,
     });
+
+    try {
+      await prisma.customer.create({
+        data: {
+          id: user._id.toString(),
+          name: input.fullName,
+          email: input.email,
+        },
+      });
+    } catch (err) {
+      await User.deleteOne({ _id: user._id });
+      throw ApiError.internal(
+        "Failed to create billing account. Please try again.",
+      );
+    }
 
     const otp = generateOtp();
 
