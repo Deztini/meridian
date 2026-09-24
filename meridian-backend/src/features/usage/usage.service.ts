@@ -87,7 +87,21 @@ export const usageService = {
 
     return {invoice};
   },
+
+  async getInvoices(customerId: string) {
+    return prisma.invoice.findMany({
+      where: {
+        customerId
+      },
+      orderBy: {
+        periodStart: "desc"
+      }
+    });
+  }
 };
+
+
+
 
 function getCurrentBillingPeriod() {
   const now = new Date();
