@@ -21,11 +21,11 @@ export const usageService = {
   },
 
   async getUsageSummary(customerId: string) {
-    const {periodStart, periodEnd} = getCurrentBillingPeriod();
+    const { periodStart, periodEnd } = getCurrentBillingPeriod();
 
     const [usageCount, plan] = await Promise.all([
       getUsageCount(customerId, periodStart, periodEnd),
-      getCustomerPlan(customerId)
+      getCustomerPlan(customerId),
     ]);
 
     const bill = calculateBilling(usageCount, plan);
@@ -33,22 +33,18 @@ export const usageService = {
     return {
       periodStart,
       periodEnd,
-      ...bill
-    }
-  }
+      ...bill,
+    };
+  },
 };
 
 function getCurrentBillingPeriod() {
   const now = new Date();
-  const periodStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  const periodStart = new Date(
+    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1),
+  );
   const periodEnd = new Date(
-    now.getFullYear(),
-    now.getMonth() + 1,
-    0,
-    23,
-    59,
-    59,
-    999,
+    Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 0, 23, 59, 59, 999),
   );
   return { periodStart, periodEnd };
 }
@@ -77,8 +73,10 @@ async function getCustomerPlan(customerId: string) {
   return subscription.plan;
 }
 
-
-function calculateBilling(usageCount: number, plan: {includedUnits: number, overageRate: Decimal, platformFee: Decimal}) {
+function calculateBilling(
+  usageCount: number,
+  plan: { includedUnits: number; overageRate: Decimal; platformFee: Decimal },
+) {
   const overageUnits = Math.max(0, usageCount - plan.includedUnits);
   const overageCharge = plan.overageRate.toNumber() * overageUnits;
   const total = plan.platformFee.toNumber() + overageCharge;
@@ -89,6 +87,6 @@ function calculateBilling(usageCount: number, plan: {includedUnits: number, over
     overageCharge,
     total,
     includedUnits: plan.includedUnits,
-    platformFee: plan.platformFee
-  }
+    platformFee: plan.platformFee.toNumber(),
+  };
 }

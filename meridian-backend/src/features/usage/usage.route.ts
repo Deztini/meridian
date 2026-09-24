@@ -8,5 +8,7 @@ const router = Router();
 
 router.post("/events", authenticate, validate(createUsageEventSchema), usageController.ingestUsageEvent);
 
+router.get("/summary", authenticate, usageController.getUsageSummary);
+
 
 export default router;
