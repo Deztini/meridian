@@ -23,4 +23,18 @@ export const usageController = {
       next(error);
     }
   },
+
+  async getUsageSummary(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = req.user as IUser;
+
+      const summary = await usageService.getUsageSummary(user._id.toString());
+
+      return new ApiResponse(200, "Usage summary retrieved", {
+        summary,
+      }).send(res);
+    } catch (error) {
+      next(error);
+    }
+  },
 };
