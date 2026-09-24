@@ -21,6 +21,7 @@ import bcrypt from "bcrypt";
 import crypto from "crypto";
 import { Session } from "./auth.session.model";
 import { prisma } from "../../lib/prisma";
+import { env } from "../../config/env";
 
 export const authService = {
   async signup(input: SignupInput) {
@@ -65,6 +66,9 @@ export const authService = {
           id: user._id.toString(),
           name: input.fullName,
           email: input.email,
+          subscription: {
+            create: { planId: env.starterPlanId },
+          },
         },
       });
     } catch (err) {

@@ -9,6 +9,7 @@ export const env = {
   jwtVerifySecret: process.env.JWT_VERIFY_SECRET!,
   jwtRefreshSecret: process.env.JWT_REFRESH_SECRET!,
   jwtAccessSecret: process.env.JWT_ACCESS_SECRET!,
+  starterPlanId: process.env.STARTER_PLAN_ID!,
   mailtrap: {
     token: process.env.MAILTRAP_TOKEN,
     fromEmail: process.env.MAILTRAP_FROM_EMAIL,
