@@ -1,7 +1,10 @@
 import { prisma } from "../../lib/prisma";
 import { ApiError } from "../../utils/ApiError";
 import { UsageEvent } from "./usage.model";
-import type { createUsageEventInput } from "./usage.validator";
+import type {
+  createUsageEventInput,
+  SimulateUsageInput,
+} from "./usage.validator";
 import { Decimal } from "@prisma/client/runtime/client";
 
 export const usageService = {
@@ -36,7 +39,26 @@ export const usageService = {
       ...bill,
     };
   },
+
+  async simulateUsage(input: SimulateUsageInput, customerId: string) {
+    const { count, eventType } = input;
+    const now = Date.now();
+
+    const events = Array.from({ length: count }, () => ({
+      customerId,
+      event: eventType,
+      timestamp: new Date(now - Math.random() * 30 * 24 * 60 * 60 * 1000),
+    }));
+
+    await UsageEvent.insertMany(events);
+
+    return { created: count };
+  },
 };
+
+
+
+
 
 function getCurrentBillingPeriod() {
   const now = new Date();
