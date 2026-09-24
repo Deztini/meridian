@@ -68,4 +68,18 @@ export const usageController = {
       next(error);
     }
   },
+
+  async getInvoices(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = req.user as IUser;
+
+      const invoices = await usageService.getInvoices(user._id.toString());
+
+      return new ApiResponse(201, "Invoices retrieved", {
+        invoices,
+      }).send(res);
+    } catch (error) {
+      next(error);
+    }
+  },
 };

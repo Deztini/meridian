@@ -14,5 +14,7 @@ router.post("/simulate", authenticate, validate(simulateUsageSchema), usageContr
 
 router.post("/invoices/generate", authenticate, usageController.generateInvoice);
 
+router.get("/invoices", authenticate, usageController.getInvoices);
+
 
 export default router;
