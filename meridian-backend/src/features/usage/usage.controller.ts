@@ -37,4 +37,21 @@ export const usageController = {
       next(error);
     }
   },
+
+  async simulateUsage(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = req.user as IUser;
+
+      const result = await usageService.simulateUsage(
+        req.body,
+        user._id.toString(),
+      );
+
+      return new ApiResponse(201, "Usage events simulated", {
+        result,
+      }).send(res);
+    } catch (error) {
+      next(error);
+    }
+  },
 };

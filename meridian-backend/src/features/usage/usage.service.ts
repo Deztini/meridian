@@ -42,23 +42,52 @@ export const usageService = {
 
   async simulateUsage(input: SimulateUsageInput, customerId: string) {
     const { count, eventType } = input;
+    const { periodStart, periodEnd } = getCurrentBillingPeriod();
     const now = Date.now();
 
     const events = Array.from({ length: count }, () => ({
       customerId,
       event: eventType,
-      timestamp: new Date(now - Math.random() * 30 * 24 * 60 * 60 * 1000),
+      timestamp: new Date(
+        periodStart.getTime() +
+          Math.random() * (periodEnd.getTime() - periodStart.getTime()),
+      ),
     }));
 
     await UsageEvent.insertMany(events);
 
     return { created: count };
   },
+
+  async generateInvoice(customerId: string) {
+    const summary = await this.getUsageSummary(customerId);
+
+    const existingInvoice = await prisma.invoice.findFirst({
+      where: {
+        customerId,
+        periodStart: summary.periodStart,
+        periodEnd: summary.periodEnd,
+      },
+    });
+
+    if (existingInvoice) {
+      throw ApiError.badRequest("Invoice for this period already exists");
+    }
+
+    const invoice = await prisma.invoice.create({
+      data: {
+        customerId,
+        periodStart: summary.periodStart,
+        periodEnd: summary.periodStart,
+        usageCount: summary.usageCount,
+        amountDue: summary.total,
+        status: "pending",
+      },
+    });
+
+    return {invoice};
+  },
 };
-
-
-
-
 
 function getCurrentBillingPeriod() {
   const now = new Date();
