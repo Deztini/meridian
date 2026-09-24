@@ -54,4 +54,18 @@ export const usageController = {
       next(error);
     }
   },
+
+  async generateInvoice(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = req.user as IUser;
+
+      const invoice = await usageService.generateInvoice(user._id.toString());
+
+      return new ApiResponse(201, "Invoice generated", {
+        invoice,
+      }).send(res);
+    } catch (error) {
+      next(error);
+    }
+  },
 };
