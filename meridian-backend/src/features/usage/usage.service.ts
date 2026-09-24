@@ -69,6 +69,7 @@ export const usageService = {
         periodEnd: summary.periodEnd,
       },
     });
+  
 
     if (existingInvoice) {
       throw ApiError.badRequest("Invoice for this period already exists");
@@ -78,14 +79,14 @@ export const usageService = {
       data: {
         customerId,
         periodStart: summary.periodStart,
-        periodEnd: summary.periodStart,
+        periodEnd: summary.periodEnd,
         usageCount: summary.usageCount,
         amountDue: summary.total,
         status: "pending",
       },
     });
 
-    return {invoice};
+    return invoice;
   },
 
   async getInvoices(customerId: string) {

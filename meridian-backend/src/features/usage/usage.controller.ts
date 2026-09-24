@@ -75,7 +75,7 @@ export const usageController = {
 
       const invoices = await usageService.getInvoices(user._id.toString());
 
-      return new ApiResponse(201, "Invoices retrieved", {
+      return new ApiResponse(200, "Invoices retrieved", {
         invoices,
       }).send(res);
     } catch (error) {
