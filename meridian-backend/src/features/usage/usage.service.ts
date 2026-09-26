@@ -8,19 +8,37 @@ import type {
 import { Decimal } from "@prisma/client/runtime/client";
 
 export const usageService = {
-  async ingestUsageEvent(input: createUsageEventInput, customerId: string) {
+  async ingestUsageEvent(
+    input: createUsageEventInput,
+    customerId: string,
+    idempotencyKey: string,
+  ) {
     const { eventType, metadata } = input;
+
+    const existing = await UsageEvent.findOne({ idempotencyKey });
+    if (existing) {
+      return { usageEvent: existing, duplicate: true };
+    }
     if (!customerId || !eventType) {
       throw ApiError.badRequest("Customer id and eventType are required");
     }
 
-    const usageEvent = await UsageEvent.create({
-      customerId,
-      event: eventType,
-      ...(metadata !== undefined && { metadata }),
-    });
-
-    return { usageEvent };
+    try {
+      const usageEvent = await UsageEvent.create({
+        customerId,
+        event: eventType,
+        idempotencyKey,
+        ...(metadata !== undefined && { metadata }),
+      });
+      return { usageEvent, duplicate: false };
+    } catch (err: any) {
+      if (err.code === 11000) {
+        const raceWinner = await UsageEvent.findOne({ idempotencyKey });
+        if (raceWinner) {
+          return { UsageEvent: raceWinner, duplicate: true };
+        }
+      }
+    }
   },
 
   async getUsageSummary(customerId: string) {
@@ -69,7 +87,6 @@ export const usageService = {
         periodEnd: summary.periodEnd,
       },
     });
-  
 
     if (existingInvoice) {
       throw ApiError.badRequest("Invoice for this period already exists");
@@ -92,17 +109,14 @@ export const usageService = {
   async getInvoices(customerId: string) {
     return prisma.invoice.findMany({
       where: {
-        customerId
+        customerId,
       },
       orderBy: {
-        periodStart: "desc"
-      }
+        periodStart: "desc",
+      },
     });
-  }
+  },
 };
-
-
-
 
 function getCurrentBillingPeriod() {
   const now = new Date();

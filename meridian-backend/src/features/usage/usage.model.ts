@@ -5,6 +5,7 @@ export interface IUsageEvents extends Document {
   event: string;
   timestamp: Date;
   metadata: Record<string, unknown>;
+  idempotencyKey: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -15,6 +16,7 @@ const UsageEventSchema = new Schema<IUsageEvents>(
     event: { type: String, required: true },
     timestamp: { type: Date, required: true, default: Date.now },
     metadata: { type: Schema.Types.Mixed, default: {} },
+    idempotencyKey: {type: String, required: true, unique: true}
   },
   { timestamps: true },
 );
