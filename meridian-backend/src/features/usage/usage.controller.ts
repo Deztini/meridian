@@ -8,15 +8,20 @@ export const usageController = {
     try {
       const user = req.user as IUser;
 
-      const { usageEvent } = await usageService.ingestUsageEvent(
+
+      const { usageEvent, duplicate } = await usageService.ingestUsageEvent(
         req.body,
         user._id.toString(),
+        req.idempotencyKey!
       );
 
-      return new ApiResponse(201, "Usage event recorded", {
+      const status = duplicate ? 200 : 201;
+      const message = duplicate ? "Event already recorded" : "Usage event recorded"
+
+      return new ApiResponse(status, message, {
         event: {
-          eventType: usageEvent.event,
-          timestamp: usageEvent.timestamp,
+          eventType: usageEvent?.event,
+          timestamp: usageEvent?.timestamp,
         },
       }).send(res);
     } catch (error) {

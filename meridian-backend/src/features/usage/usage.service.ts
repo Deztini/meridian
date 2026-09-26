@@ -38,6 +38,7 @@ export const usageService = {
           return { UsageEvent: raceWinner, duplicate: true };
         }
       }
+      throw err;
     }
   },
 
