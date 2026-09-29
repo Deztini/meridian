@@ -7,11 +7,19 @@ interface AuthUser {
 }
 
 interface AuthStore {
-  currentUser: AuthUser | null;
-  setCurrentUser: (user: AuthUser | null) => void;
+  accessToken: string | null;
+  user: AuthUser | null;
+  isInitializing: boolean;
+  setAuth: (accessToken: string, user: AuthUser) => void;
+  clearAuth: () => void;
+  setIntializing: (value: boolean) => void;
 }
 
 export const useAuthStore = create<AuthStore>((set) => ({
-  currentUser: null,
-  setCurrentUser: (user) => set({ currentUser: user }),
+  user: null,
+  accessToken: null,
+  isInitializing: true,
+  setAuth: (accessToken, user) => set({ accessToken, user }),
+  clearAuth: () => set({ accessToken: null, user: null }),
+  setIntializing: (value) => set({ isInitializing: value }),
 }));
