@@ -1,14 +1,21 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { AuthUser, useAuthStore } from "@/stores/auth-store";
+import { useLogout } from "@/features/auth/hooks/useLogout";
+import { AuthUser } from "@/stores/auth-store";
 import { LayoutDashboard } from "lucide-react";
 import { FileText } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export function Sidebar({ user }: { user: AuthUser }) {
-  const {clearAuth} = useAuthStore();
+  const router = useRouter();
+  const { mutate, isSuccess, isPending } = useLogout();
+  const logoutHandler = () => {
+    mutate();
+  };
+
   const pathName = usePathname();
   const nameParts = user.fullName.split(" ");
   const lastNameInitials = nameParts[0].charAt(0);
@@ -18,6 +25,12 @@ export function Sidebar({ user }: { user: AuthUser }) {
     { label: "Dashboard", href: "/dashboard", icon: <LayoutDashboard /> },
     { label: "Invoice", href: "/invoice", icon: <FileText /> },
   ];
+
+  useEffect(() => {
+    if (isSuccess) {
+      router.push("/");
+    }
+  }, [isSuccess, router]);
   return (
     <div className="flex flex-col justify-between w-64 bg-white border-r border-gray-300  py-4">
       <div>
@@ -51,11 +64,19 @@ export function Sidebar({ user }: { user: AuthUser }) {
           </div>
           <div className="flex flex-col gap-1">
             <h1 className="font-sans text-xs">{user.fullName}</h1>
-            <h1 className="text-gray-400 text-[10px] font-sans">{user.email}</h1>
+            <h1 className="text-gray-400 text-[10px] font-sans">
+              {user.email}
+            </h1>
           </div>
         </div>
 
-        <Button>Logout</Button>
+        <Button
+          onClick={logoutHandler}
+          disabled={isPending}
+          className="bg-red-500 cursor-pointer rounded-sm w-40 px-2 py-4 hover:bg-red-700 ml-7"
+        >
+          Logout
+        </Button>
       </div>
     </div>
   );

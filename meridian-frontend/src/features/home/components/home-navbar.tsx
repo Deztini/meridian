@@ -31,7 +31,7 @@ function renderAuthAction(isInitializing: boolean, accessToken: string | null) {
 
       <Link
         href="/signup"
-        className="flex gap-1 bg-black w-full md:w-[130] px-3 py-4 rounded-sm cursor-pointer font-sans"
+        className="flex gap-1 bg-black text-white w-full md:w-[170] px-6 py-2 rounded-sm cursor-pointer font-sans hover:bg-gray-900 "
       >
         <span>Get Started</span>
         <ArrowRight />
@@ -76,7 +76,7 @@ export function HomeNavbar() {
           </div>
         </div>
 
-        <div className="flex gap-3 items-center">
+        <div className="flex gap-4 items-center">
           {renderAuthAction(isInitializing, accessToken)}
           {/* <Link
             href="/login"
