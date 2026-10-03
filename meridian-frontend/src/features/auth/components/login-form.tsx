@@ -10,8 +10,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useLogin } from "../hooks/useLogin";
 import Link from "next/link";
 import { PasswordInput } from "../../../components/password-input";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export function LoginForm() {
+  const router = useRouter()
   const {
     register,
     handleSubmit,
@@ -20,11 +23,18 @@ export function LoginForm() {
     resolver: zodResolver(loginSchema),
   });
 
-  const { mutate, isPending, error } = useLogin();
+  const { mutate, isPending, error, isSuccess } = useLogin();
 
   const onSubmit = (values: LoginFormValues) => {
     mutate(values);
   };
+
+   useEffect(() => {
+      if (isSuccess) {
+        router.push("/dashboard");
+        console.log("routed");
+      }
+    }, [isSuccess, router]);
   return (
     <div className="flex flex-col gap-3">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
