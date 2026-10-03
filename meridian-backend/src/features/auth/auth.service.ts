@@ -240,6 +240,7 @@ export const authService = {
         id: user._id,
         email: user.email,
         fullName: user.fullName,
+        isVerified: user.isVerified
       },
     };
   },
@@ -276,6 +277,8 @@ export const authService = {
 
     await Session.deleteOne({ _id: session._id });
 
+    const user = await User.findOne({ _id: session.userId});
+
     const newSession = await Session.create({
       userId: session.userId.toString(),
       refreshTokenHash: "pending",
@@ -297,6 +300,12 @@ export const authService = {
     return {
       accessToken: newAccessToken,
       refreshToken: newRefreshToken,
+       user: {
+        id: user?._id,
+        email: user?.email,
+        fullName: user?.fullName,
+        isVerified: user?.isVerified
+      },
     };
   },
 

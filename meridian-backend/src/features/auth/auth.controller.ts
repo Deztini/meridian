@@ -204,12 +204,13 @@ export const authController = {
   async refresh(req: Request, res: Response, next: NextFunction) {
     try {
       const token = req.cookies.refreshToken;
-      const { accessToken, refreshToken } = await authService.refresh(token);
+      const { accessToken, refreshToken, user } = await authService.refresh(token);
 
       res.cookie("refreshToken", refreshToken, REFRESH_COOKIE_OPTIONS);
 
       return new ApiResponse(200, "Token refreshed", {
         accessToken,
+        user
       }).send(res);
     } catch (err) {
       next(err);
