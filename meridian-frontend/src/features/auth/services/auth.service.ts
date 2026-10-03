@@ -72,3 +72,8 @@ export async function resetPassword(payload: ResetPasswordPayload): Promise<Gene
   return data;
 }
 
+
+export async function logout(): Promise<GenericResponse> {
+  const { data } = await apiClient.post<GenericResponse>("/auth/logout");
+  return data;
+}
