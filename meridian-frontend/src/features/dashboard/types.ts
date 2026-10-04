@@ -3,8 +3,8 @@ export interface UsageSummaryResponse {
   message: string;
   data?: {
     summary: {
-      periodStart: Date;
-      periodEnd: Date;
+      periodStart: string;
+      periodEnd: string;
       usageCount: number;
       overageUnits: number;
       overageCharge: number;

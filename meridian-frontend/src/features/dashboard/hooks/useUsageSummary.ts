@@ -1,0 +1,10 @@
+import {  useQuery } from "@tanstack/react-query";
+import { getUsageSummary } from "../services/dashboard.service";
+
+
+export function useUsageSummary() {
+  return useQuery({
+    queryKey: ["usage-summary"],
+    queryFn: () => getUsageSummary(),
+  });
+}
