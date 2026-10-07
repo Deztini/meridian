@@ -16,6 +16,9 @@ export async function simulateUsage(
   const { data } = await apiClient.post<SimulateUsageResponse>(
     "/usage/simulate",
     payload,
+    {
+      headers: {"idempotency-key": crypto.randomUUID()}
+    }
   );
   return data;
 }

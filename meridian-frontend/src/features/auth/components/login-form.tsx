@@ -49,7 +49,7 @@ export function LoginForm() {
             id="email"
             type="email"
             {...register("email")}
-            className="rounded-sm py-5"
+            className="roundeed-sm py-5"
             placeholder="johndoe@gmail.com"
           />
           {errors.email && (
