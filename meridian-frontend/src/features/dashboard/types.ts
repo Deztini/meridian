@@ -14,3 +14,20 @@ export interface UsageSummaryResponse {
     };
   };
 }
+
+export interface SimulateUsageResponse {
+  success: boolean;
+  message: string;
+  data?: {
+    result: {
+      created: number;
+      duplicate: boolean;
+    };
+  };
+}
+
+
+export interface SimulateUsagePayload {
+  count: number;
+  eventType: string;
+}
