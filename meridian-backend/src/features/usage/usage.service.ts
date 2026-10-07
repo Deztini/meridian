@@ -35,7 +35,7 @@ export const usageService = {
       if (err.code === 11000) {
         const raceWinner = await UsageEvent.findOne({ idempotencyKey });
         if (raceWinner) {
-          return { UsageEvent: raceWinner, duplicate: true };
+          return { usageEvent: raceWinner, duplicate: true };
         }
       }
       throw err;
@@ -59,23 +59,40 @@ export const usageService = {
     };
   },
 
-  async simulateUsage(input: SimulateUsageInput, customerId: string) {
+  async simulateUsage(
+    input: SimulateUsageInput,
+    customerId: string,
+    idempotencyKey: string,
+  ) {
     const { count, eventType } = input;
     const { periodStart, periodEnd } = getCurrentBillingPeriod();
-    const now = Date.now();
+    
+    console.log(idempotencyKey);
+    const existing = await UsageEvent.findOne({ idempotencyKey });
+    console.log(existing);
+    if (existing) {
+      return { created: 0, duplicate: true };
+    }
 
-    const events = Array.from({ length: count }, () => ({
+    const events = Array.from({ length: count }, (_, i) => ({
       customerId,
       event: eventType,
+      idempotencyKey: `${idempotencyKey}:${i}`,
       timestamp: new Date(
         periodStart.getTime() +
           Math.random() * (periodEnd.getTime() - periodStart.getTime()),
       ),
     }));
 
-    await UsageEvent.insertMany(events);
-
-    return { created: count };
+    try {
+      await UsageEvent.insertMany(events);
+    } catch (err: any) {
+      if (err.code === 11000) {
+        return { created: 0, duplicate: true };
+      }
+      throw err;
+    }
+    return { created: count, duplicate: false };
   },
 
   async generateInvoice(customerId: string) {

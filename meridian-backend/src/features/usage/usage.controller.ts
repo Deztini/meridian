@@ -8,15 +8,16 @@ export const usageController = {
     try {
       const user = req.user as IUser;
 
-
       const { usageEvent, duplicate } = await usageService.ingestUsageEvent(
         req.body,
         user._id.toString(),
-        req.idempotencyKey!
+        req.idempotencyKey!,
       );
 
       const status = duplicate ? 200 : 201;
-      const message = duplicate ? "Event already recorded" : "Usage event recorded"
+      const message = duplicate
+        ? "Event already recorded"
+        : "Usage event recorded";
 
       return new ApiResponse(status, message, {
         event: {
@@ -46,10 +47,12 @@ export const usageController = {
   async simulateUsage(req: Request, res: Response, next: NextFunction) {
     try {
       const user = req.user as IUser;
+      console.log(user, req.idempotencyKey);
 
       const result = await usageService.simulateUsage(
         req.body,
         user._id.toString(),
+        req.idempotencyKey!,
       );
 
       return new ApiResponse(201, "Usage events simulated", {

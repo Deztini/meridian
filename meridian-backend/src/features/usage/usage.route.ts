@@ -11,7 +11,7 @@ router.post("/events", authenticate, requireIdempotencyKey, validate(createUsage
 
 router.get("/summary", authenticate, usageController.getUsageSummary);
 
-router.post("/simulate", authenticate, validate(simulateUsageSchema), usageController.simulateUsage);
+router.post("/simulate", authenticate, requireIdempotencyKey, validate(simulateUsageSchema), usageController.simulateUsage);
 
 router.post("/invoices/generate", authenticate, usageController.generateInvoice);
 
