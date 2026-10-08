@@ -66,6 +66,10 @@ export const usageService = {
   ) {
     const { count, eventType } = input;
     const { periodStart, periodEnd } = getCurrentBillingPeriod();
+    const now = Date.now();
+       const windowMs = 2 * 60 * 60 * 1000;
+    const windowStart = Math.max(now - windowMs, periodStart.getTime());
+const span = now - windowStart;
     
     console.log(idempotencyKey);
     const existing = await UsageEvent.findOne({ idempotencyKey });
@@ -73,15 +77,16 @@ export const usageService = {
     if (existing) {
       return { created: 0, duplicate: true };
     }
-
+ 
     const events = Array.from({ length: count }, (_, i) => ({
       customerId,
       event: eventType,
       idempotencyKey: `${idempotencyKey}:${i}`,
-      timestamp: new Date(
-        periodStart.getTime() +
-          Math.random() * (periodEnd.getTime() - periodStart.getTime()),
-      ),
+        timestamp: new Date(windowStart + Math.random() * span),
+      // timestamp: new Date(
+      //   periodStart.getTime() +
+      //     Math.random() * (periodEnd.getTime() - periodStart.getTime()),
+      // ),
     }));
 
     try {
@@ -134,7 +139,40 @@ export const usageService = {
       },
     });
   },
+
+  async getUsageActivity(customerId: string) {
+    const bucketMs = 15 * 60 * 1000;
+    const since = Date.now() - 2 * 60 * 60 * 1000;
+
+    const rows = await UsageEvent.aggregate([
+      {$match: {customerId, timestamp: {$gte: new Date(since)}}},
+      {
+        $group: {
+          _id: {
+             $subtract: [
+              {$toLong: "$timestamp"},
+              {$mod: [{$toLong: "$timestamp"}, bucketMs]}
+             ]
+          },
+          calls: {$sum: 1}
+        }
+      }
+    ]);
+
+    const counts = new Map<number, number>(rows.map((r) => [r._id, r.calls] ));
+    const start = Math.floor(since/bucketMs) * bucketMs;
+    const points = [];
+    for (let i = start; i<=Date.now(); i+=bucketMs) {
+      points.push({time: new Date(i).toISOString(), calls: counts.get(i) ?? 0})
+    }
+
+    return points;
+  }
 };
+
+
+
+
 
 function getCurrentBillingPeriod() {
   const now = new Date();

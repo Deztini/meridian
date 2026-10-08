@@ -90,4 +90,19 @@ export const usageController = {
       next(error);
     }
   },
+
+  
+  async getUsageActivity(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = req.user as IUser;
+
+      const points = await usageService.getUsageActivity(user._id.toString());
+
+      return new ApiResponse(200, "Usage activity retrieved", {
+        points,
+      }).send(res);
+    } catch (error) {
+      next(error);
+    }
+  },
 };

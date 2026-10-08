@@ -17,5 +17,7 @@ router.post("/invoices/generate", authenticate, usageController.generateInvoice)
 
 router.get("/invoices", authenticate, usageController.getInvoices);
 
+router.get("/events", authenticate, usageController.getUsageActivity);
+
 
 export default router;
