@@ -9,3 +9,7 @@ export function formatPeriod(periodStart: string, periodEnd: string) {
   const year = formatter(periodEnd, { year: "numeric" });
   return `${start}  -  ${end},   ${year}`;
 }
+
+
+export const formatTime = (iso: string) =>
+  new Date(iso).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false });

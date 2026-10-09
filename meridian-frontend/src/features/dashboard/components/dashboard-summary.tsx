@@ -1,7 +1,7 @@
 "use client";
 
 import { useUsageSummary } from "../hooks/useUsageSummary";
-import { formatPeriod } from "../utils/periodFormatter";
+import { formatPeriod } from "../utils/dateFormatter";
 
 export function DashboardSummary() {
   const { data, isPending, error } = useUsageSummary();
@@ -28,7 +28,7 @@ export function DashboardSummary() {
             </span>
             <span className="font-sans text-gray-400">API calls</span>
             <span className="font-sans text-blue-500 text-xs">
-              {summary && `+${summary.overageCharge} overage`}
+              {summary && `+${summary.overageCharge.toFixed(2)} overage`}
             </span>
           </div>
         </div>
