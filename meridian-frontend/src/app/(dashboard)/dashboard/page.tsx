@@ -1,3 +1,4 @@
+import { ActivityChart } from "@/features/dashboard/components/activity-chart";
 import { DashboardNavbar } from "@/features/dashboard/components/dashboard-navbar";
 import { DashboardSummary } from "@/features/dashboard/components/dashboard-summary";
 import { SimulateUsage } from "@/features/dashboard/components/simulate-usage";
@@ -8,6 +9,7 @@ export default function DashboardPage() {
       <DashboardNavbar />
       <DashboardSummary />
       <SimulateUsage />
+      <ActivityChart />
     </div>
   );
 }

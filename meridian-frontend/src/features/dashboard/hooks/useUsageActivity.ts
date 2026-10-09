@@ -4,6 +4,7 @@ import { getUsageActivity } from "../services/dashboard.service";
 export function useUsageActivity() {
   return useQuery({
     queryKey: ["usage-activity"],
-    queryFn: () => getUsageActivity()
-  })
+    queryFn: getUsageActivity,
+    select: (res) => res.data?.points,
+  });
 }

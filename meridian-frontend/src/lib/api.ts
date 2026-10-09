@@ -27,7 +27,7 @@ apiClient.interceptors.response.use(
       error.config._retry = true;
       try {
        const res = await apiClient.post("/auth/refresh");
-       useAuthStore.getState().setAuth(res.data.accessToken, res.data.user);
+       useAuthStore.getState().setAuth(res.data.data.accessToken, res.data.data.user);
        error.config.headers.Authorization = `Bearer ${res.data.accessToken}`;
        return apiClient(error.config);
       } catch {
