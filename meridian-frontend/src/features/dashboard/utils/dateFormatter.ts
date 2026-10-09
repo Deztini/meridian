@@ -1,7 +1,8 @@
-const formatter = (iso: string, opts: Intl.DateTimeFormatOptions) =>
+export const formatter = (iso: string, opts: Intl.DateTimeFormatOptions) =>
   new Intl.DateTimeFormat("en-US", { timeZone: "UTC", ...opts }).format(
     new Date(iso),
   );
+
 
 export function formatPeriod(periodStart: string, periodEnd: string) {
   const start = formatter(periodStart, { month: "short", day: "numeric" });
