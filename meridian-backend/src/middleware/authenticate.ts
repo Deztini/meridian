@@ -2,7 +2,7 @@ import type { Request, Response, NextFunction } from "express";
 import { ApiError } from "../utils/ApiError";
 import { verifyAccessToken } from "../lib/token";
 import { User } from "../features/auth/auth.model";
-
+import jwt from "jsonwebtoken";
 
 export async function authenticate(
   req: Request,
@@ -21,9 +21,20 @@ export async function authenticate(
       throw ApiError.unauthorized("Invalid authorization header");
     }
 
-    const payload = verifyAccessToken(token) 
+    let payload;
+    try {
+      payload = verifyAccessToken(token);
+    } catch (err) {
+      if (err instanceof jwt.TokenExpiredError) {
+        throw ApiError.unauthorized("Access token expired");
+      }
+      if (err instanceof jwt.JsonWebTokenError) {
+        throw ApiError.unauthorized("Invalid access token");
+      }
+      throw err;
+    }
 
-    const user = await User.findById(payload.userId).select("-password");
+    const user = await User.findById(payload?.userId).select("-password");
 
     if (!user) {
       throw ApiError.unauthorized("User not found");
