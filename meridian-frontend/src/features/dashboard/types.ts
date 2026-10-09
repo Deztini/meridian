@@ -26,8 +26,23 @@ export interface SimulateUsageResponse {
   };
 }
 
+export interface UsageActivityPoints {
+  time: string;
+  calls: number;
+}
+
+export interface UsageActivityResponse {
+  success: boolean;
+  message: string;
+  data?: {
+    points: UsageActivityPoints[]
+  }
+}
+
 
 export interface SimulateUsagePayload {
   count: number;
   eventType: string;
 }
+
+

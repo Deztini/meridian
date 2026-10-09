@@ -3,6 +3,7 @@ import {
   SimulateUsagePayload,
   SimulateUsageResponse,
   UsageSummaryResponse,
+  UsageActivityResponse
 } from "../types";
 
 export async function getUsageSummary(): Promise<UsageSummaryResponse> {
@@ -22,3 +23,12 @@ export async function simulateUsage(
   );
   return data;
 }
+
+
+export async function getUsageActivity(): Promise<UsageActivityResponse> {
+  const { data } = await apiClient.get<UsageActivityResponse>(
+    "/usage/events"
+  );
+  return data;
+}
+

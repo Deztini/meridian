@@ -8,9 +8,12 @@ export function useSimulateUsage() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (payload: SimulateUsagePayload) => simulateUsage(payload),
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       toast.message(data.message ?? "Events simulated");
-      queryClient.invalidateQueries({queryKey: ["usage-summary"]})
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["usage-summary"] }),
+        queryClient.invalidateQueries({ queryKey: ["usage-activity"] }),
+      ]);
     },
     onError: (error) => {
       toast.error(getErrorMessage(error));
