@@ -5,6 +5,7 @@ export const formatter = (iso: string, opts: Intl.DateTimeFormatOptions) =>
 
 
 export function formatPeriod(periodStart: string, periodEnd: string) {
+  if (!periodStart || !periodEnd) return;
   const start = formatter(periodStart, { month: "short", day: "numeric" });
   const end = formatter(periodEnd, { month: "short", day: "numeric" });
   const year = formatter(periodEnd, { year: "numeric" });

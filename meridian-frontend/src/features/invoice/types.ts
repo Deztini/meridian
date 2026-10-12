@@ -22,6 +22,6 @@ export interface InvoiceResponse {
   success: boolean;
   message: string;
   data?: {
-    invoices: InvoiceItem;
+    invoice: InvoiceItem;
   };
 }
