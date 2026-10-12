@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { getInvoices } from "../services/invoice.service";
+import { getInvoiceById } from "../services/invoice.service";
 
-export function useInvoice() {
+export function useInvoice(id: string) {
   return useQuery({
-    queryKey: ["invoice"],
-    queryFn: getInvoices,
+    queryKey: ["invoice", id],
+    queryFn: () => getInvoiceById(id),
+    enabled: !!id
   });
 }

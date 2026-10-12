@@ -9,10 +9,19 @@ export interface InvoiceItem {
   createdAt: string;
 }
 
-export interface InvoiceResponse {
+export interface InvoicesResponse {
   success: boolean;
   message: string;
   data?: {
     invoices: InvoiceItem[];
+  };
+}
+
+
+export interface InvoiceResponse {
+  success: boolean;
+  message: string;
+  data?: {
+    invoices: InvoiceItem;
   };
 }

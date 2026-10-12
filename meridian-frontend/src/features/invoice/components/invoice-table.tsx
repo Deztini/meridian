@@ -4,13 +4,14 @@ import {
   formatPeriod,
   formatter,
 } from "@/features/dashboard/utils/dateFormatter";
-import { useInvoice } from "../hooks/useInvoice";
+import { useInvoices } from "../hooks/useInvoices";
 import { ChevronRight, Dot } from "lucide-react";
+import Link from "next/link";
 
 export function InvoiceTable() {
-  const { data } = useInvoice();
+  const { data } = useInvoices();
   return (
-    <div className="my-20 overflow-hidden rounded border border-gray-200 bg-gray-100">
+    <div className="my-10 overflow-hidden rounded border border-gray-200 bg-gray-100">
       <table className="w-full border-collapse">
         <thead>
           <tr className="divide-x divide-gray-300 border-b border-gray-300">
@@ -57,7 +58,9 @@ export function InvoiceTable() {
                 {formatter(inv.periodStart, { month: "short", day: "numeric" })}
               </td>
               <td className="cursor-pointer text-gray-400 px-4">
-                <ChevronRight size={14} />
+                <Link  href={`/invoice/${inv.id}`}>
+                  <ChevronRight size={14} />
+                </Link>
               </td>
             </tr>
           ))}
