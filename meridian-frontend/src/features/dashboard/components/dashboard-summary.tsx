@@ -2,10 +2,14 @@
 
 import { useUsageSummary } from "../hooks/useUsageSummary";
 import { formatPeriod } from "../utils/dateFormatter";
+import { DashboardSummarySkeleton } from "./dashboard-summary-skeleton";
 
 export function DashboardSummary() {
-  const { data, isPending, error } = useUsageSummary();
-  const summary = data?.data?.summary;
+  const { data, isPending, isError } = useUsageSummary();
+   const summary = data?.data?.summary;
+  if (isPending) return <DashboardSummarySkeleton />
+  if (isError || !summary) return <p className="font-sans text-2xl text-center text-red-400">Couldn&apos;t load usage summary</p>
+ 
   return (
     <div className="py-10 px-22">
       <span className="font-sans text-gray-400 text-[15px]">
