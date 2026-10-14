@@ -9,6 +9,7 @@ export function formatPeriod(periodStart: string, periodEnd: string) {
   const start = formatter(periodStart, { month: "short", day: "numeric" });
   const end = formatter(periodEnd, { month: "short", day: "numeric" });
   const year = formatter(periodEnd, { year: "numeric" });
+  console.log(`${periodStart} , ${periodEnd}`)
   return `${start}  -  ${end},   ${year}`;
 }
 

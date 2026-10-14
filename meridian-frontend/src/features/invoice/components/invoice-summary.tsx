@@ -7,19 +7,20 @@ import {
   formatter,
 } from "@/features/dashboard/utils/dateFormatter";
 import { Dot } from "lucide-react";
+import { InvoiceSummarySkeleton } from "./invoice-summary-skeleton";
 
 export function InvoiceSummary() {
   const { id } = useParams<{ id: string }>();
   const { data, isPending, isError } = useInvoice(id);
   const invoice = data?.data?.invoice;
-  if (isPending) return <p className="text-gray-500">Loading...</p>;
-  if (isError || !invoice) return <p>Invoice not found.</p>;
+  if (isPending) return <InvoiceSummarySkeleton />
+  if (isError || !invoice) return <p className="text-red-500 font-sans text-[18px] my-60 text-center">Invoice not found.</p>;
   const rows = [
     {
       label: "Period",
       value: formatPeriod(
         invoice.periodStart as string,
-        invoice.periodStart as string,
+        invoice.periodEnd as string,
       ),
     },
     { label: "Usage", value: `${invoice.usageCount.toLocaleString()} calls` },
