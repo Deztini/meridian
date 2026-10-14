@@ -17,6 +17,8 @@ router.post("/invoices/generate", authenticate, usageController.generateInvoice)
 
 router.get("/invoices", authenticate, usageController.getInvoices);
 
+router.get("/invoices/:id", authenticate, usageController.getInvoiceById);
+
 router.get("/events", authenticate, usageController.getUsageActivity);
 
 

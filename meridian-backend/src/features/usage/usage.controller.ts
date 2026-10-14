@@ -91,6 +91,21 @@ export const usageController = {
     }
   },
 
+   async getInvoiceById(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = req.user as IUser;
+      const invoiceId = req.params.id as string;
+  
+      const invoice = await usageService.getInvoiceById( invoiceId, user._id.toString());
+
+      return new ApiResponse(200, "Invoice retrieved", {
+        invoice,
+      }).send(res);
+    } catch (error) {
+      next(error);
+    }
+  },
+
   
   async getUsageActivity(req: Request, res: Response, next: NextFunction) {
     try {
