@@ -10,3 +10,9 @@ export async function getInvoiceById(id: string): Promise<InvoiceResponse> {
   const { data } = await apiClient.get<InvoiceResponse>(`/usage/invoices/${id}`);
   return data;
 }
+
+export async function generateInvoice(): Promise<InvoiceResponse> {
+  const { data } = await apiClient.post<InvoiceResponse>(`/usage/invoices/generate`);
+  return data;
+}
+
