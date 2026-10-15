@@ -4,31 +4,31 @@ import { env } from "../../config/env";
 import { ApiResponse } from "../../utils/ApiResponse";
 import { ApiError } from "../../utils/ApiError";
 
-const VERIFY_COOKIE_OPTIONS: CookieOptions = {
+const isProd = env.nodeEnv === "production";
+
+const BASE_COOKIE: CookieOptions = {
   httpOnly: true,
-  secure: env.nodeEnv === "production",
-  sameSite: "lax",
+  secure: isProd,
+  sameSite: isProd ? "none" : "lax",
+};
+
+const VERIFY_COOKIE_OPTIONS: CookieOptions = {
+  ...BASE_COOKIE,
   maxAge: 10 * 60 * 1000,
 };
 
 const REFRESH_COOKIE_OPTIONS: CookieOptions = {
-  httpOnly: true,
-  secure: env.nodeEnv === "production",
-  sameSite: "lax",
+  ...BASE_COOKIE,
   maxAge: 7 * 24 * 60 * 60 * 1000,
 };
 
 const RESET_OTP_COOKIE_OPTIONS: CookieOptions = {
-  httpOnly: true,
-  secure: env.nodeEnv === "production",
-  sameSite: "lax",
+  ...BASE_COOKIE,
   maxAge: 10 * 60 * 1000,
 };
 
 const RESET_AUTHORIZED_COOKIE_OPTIONS: CookieOptions = {
-  httpOnly: true,
-  secure: env.nodeEnv === "production",
-  sameSite: "lax",
+  ...BASE_COOKIE,
   maxAge: 10 * 60 * 1000,
 };
 
@@ -204,13 +204,14 @@ export const authController = {
   async refresh(req: Request, res: Response, next: NextFunction) {
     try {
       const token = req.cookies.refreshToken;
-      const { accessToken, refreshToken, user } = await authService.refresh(token);
+      const { accessToken, refreshToken, user } =
+        await authService.refresh(token);
 
       res.cookie("refreshToken", refreshToken, REFRESH_COOKIE_OPTIONS);
 
       return new ApiResponse(200, "Token refreshed", {
         accessToken,
-        user
+        user,
       }).send(res);
     } catch (err) {
       next(err);
