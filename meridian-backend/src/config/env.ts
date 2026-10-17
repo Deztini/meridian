@@ -10,6 +10,7 @@ export const env = {
   jwtRefreshSecret: process.env.JWT_REFRESH_SECRET!,
   jwtAccessSecret: process.env.JWT_ACCESS_SECRET!,
   starterPlanId: process.env.STARTER_PLAN_ID!,
+  redisUrl: process.env.REDIS_URL!,
   mailtrap: {
     token: process.env.MAILTRAP_TOKEN,
     fromEmail: process.env.MAILTRAP_FROM_EMAIL,

@@ -9,6 +9,8 @@ import v1Router from "./api/v1";
 
 const app = express();
 
+app.set("trust proxy", 1);
+
 app.use(helmet());
 app.use(cors({origin: env.clientOrigin, credentials: true}));
 app.use(express.json());
